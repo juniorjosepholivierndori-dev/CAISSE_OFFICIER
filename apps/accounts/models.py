@@ -3,6 +3,7 @@ from django.db import models
 
 
 class User(AbstractUser):
+
     class Role(models.TextChoices):
         ADMIN = "ADMIN", "Administrateur"
         TRESORIER = "TRESORIER", "Trésorier"

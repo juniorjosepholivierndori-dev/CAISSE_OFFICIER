@@ -1,0 +1,164 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cotisations - GMMG</title>
+
+    <link rel="stylesheet"
+          href="{% static 'dashboard/css/cotisations.css' %}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+
+<main class="main-content">
+
+
+    <header class="topbar">
+
+        <div>
+            <h1>Cotisations</h1>
+        
+        </div>
+
+    </header>
+
+
+
+    <section class="content">
+
+
+
+        <div class="statistics">
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon green">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+                <div>
+                    <span>Nombre de personnes</span>
+                    <strong id="nombre-total">
+                     {{ nombre_cotisations }}
+                   </strong>
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon orange">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                </div>
+
+                <div>
+                    <span>Montant total</span>
+                    <strong id="montant-total">
+                      {{ montant_total }} FCFA
+                 </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    
+
+        <div class="card table-card">
+
+            <div class="card-title">
+
+                <div class="title-icon orange">
+                    <i class="fa-solid fa-coins"></i>
+                </div>
+
+                <div>
+                    <h2>Liste des cotisations</h2>
+                </div>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Personne</th>
+                            <th>Mois</th>
+                            <th>Année</th>
+                            <th>Montant</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="cotisations-body">
+
+                           {% for cotisation in cotisations %}
+
+                                <tr>
+
+                                      <td>
+                              {{ cotisation.payeur }}
+                                    </td>
+
+                             <td>
+                            {{ cotisation.mois_concerne|date:"F" }}
+                           </td>
+
+                          <td>
+                          {{ cotisation.mois_concerne|date:"Y" }}
+                      </td>
+
+                           <td>
+                         {{ cotisation.montant }} FCFA
+                             </td>
+
+                            </tr>
+
+                          {% empty %}
+
+                               <tr>
+                     <td colspan="4" style="text-align: center;">
+                
+                        </td>
+                     </tr>
+
+                       {% endfor %}
+
+</tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+</main>
+
+
+<script src="{% static 'dashboard/js/cotisations.js' %}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Historique - GMMG</title>
+
+    <link rel="stylesheet"
+          href="{% static 'dashboard/css/historique.css' %}">
+</head>
+
+<body>
+
+<div class="historique-container">
+
+    <!-- EN-TÊTE -->
+    <div class="historique-header">
+
+        <div>
+            <h1>Historique des opérations</h1>
+            <p>Consultez toutes les opérations effectuées dans la caisse.</p>
+        </div>
+
+        <a href="{% url 'profil-tresorier' %}" class="btn-retour">
+            ← Retour
+        </a>
+
+    </div>
+
+
+    <!-- TABLEAU UNIQUE -->
+    <div class="table-container">
+
+        <table class="historique-table">
+
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Montant</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+    {% for operation in historique_operations %}
+
+    <tr>
+
+        <td>
+            {% if operation.action == "Cotisation" %}
+                <span class="badge cotisation">
+                    Cotisation
+                </span>
+
+            {% elif operation.action == "Prêt" %}
+                <span class="badge pret">
+                    Prêt
+                </span>
+
+            {% else %}
+                <span class="badge remboursement">
+                    Remboursement
+                </span>
+            {% endif %}
+        </td>
+
+        <td>
+            {{ operation.description }}
+        </td>
+
+        <td>
+            {{ operation.date|date:"d/m/Y" }}
+        </td>
+
+        <td class="montant">
+            {{ operation.montant }} FCFA
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="4" class="aucune-donnee">
+            Aucun historique disponible pour le moment.
+        </td>
+    </tr>
+
+    {% endfor %}
+
+</tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<script src="{% static 'dashboard/js/historique.js' %}"></script>
+
+</body>
+</html>
