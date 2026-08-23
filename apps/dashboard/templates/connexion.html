@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Connexion - Caisse des Officiers du GMMG</title>
+
+    <link rel="stylesheet" href="/static/style1.css">
+</head>
+
+<body>
+
+    <div class="connexion-container">
+
+        <div class="logo">
+            <img src="/static/images/logo-gmmg.png" alt="Logo GMMG">
+        </div>
+
+        <h1>Se connecter</h1>
+
+        <div class="ligne-orange"></div>
+
+        <form action="/connexion/" method="post">
+
+            <div class="form-group">
+
+                <label for="email">Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Entrez votre adresse email"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="password">Mot de passe</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Entrez votre mot de passe"
+                    required
+                >
+
+            </div>
+
+            <div class="mot-de-passe-oublie">
+
+                <a href="#">
+                    Mot de passe oublié ?
+                </a>
+
+            </div>
+
+            <button type="submit">
+                SE CONNECTER
+            </button>
+
+        </form>
+
+        <p class="inscription-link">
+
+            Vous n'avez pas encore de compte ?
+
+            <a href="/inscription/">  S'inscrire </a>
+
+        </p>
+
+    </div>
+
+    <script src="/static/js/connexion.js"></script>
+
+</body>
+
+</html>
+

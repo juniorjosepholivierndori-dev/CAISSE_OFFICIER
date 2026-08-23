@@ -1,0 +1,230 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #ffffff;
+    color: #333333;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px 15px;
+}
+
+.inscription-container {
+    width: 100%;
+    max-width: 650px;
+
+    background-color: #ffffff;
+
+    padding: 35px 45px;
+
+    border-radius: 12px;
+
+    border-top: 5px solid #e1590c;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.logo img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+}
+
+h1 {
+    text-align: center;
+
+    font-size: 27px;
+    font-weight: 600;
+
+    color: #e1590c;
+
+    margin-bottom: 12px;
+}
+
+.ligne-orange {
+    width: 65px;
+    height: 4px;
+
+    background-color: #e1590c;
+
+    margin: 0 auto 30px auto;
+
+    border-radius: 5px;
+}
+
+form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #1B5E20;
+
+    margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    height: 45px;
+
+    padding: 0 13px;
+
+    border: 1px solid #d8d8d8;
+
+    border-radius: 6px;
+
+    background-color: #ffffff;
+
+    font-size: 14px;
+
+    color: #333333;
+
+    outline: none;
+
+    transition: all 0.3s ease;
+}
+
+.form-group input::placeholder {
+    color: #999999;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #e1590c;
+
+    box-shadow: 0 0 0 3px rgba(225, 89, 12, 0.18);
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+button {
+    width: 100%;
+    height: 47px;
+
+    margin-top: 8px;
+
+    border: none;
+    border-radius: 6px;
+
+    background-color: #e1590c;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    letter-spacing: 0.5px;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #e1590c;
+
+    box-shadow: 0 4px 10px rgba(225, 89, 12, 0.30);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+.inscription-container p {
+    text-align: center;
+
+    margin-top: 22px;
+
+    font-size: 14px;
+
+    color: #666666;
+}
+
+.inscription-container p a {
+    color: #1B5E20;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    transition: 0.3s ease;
+}
+
+.inscription-container p a:hover {
+    color: #e1590c;
+
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 700px) {
+
+    .inscription-container {
+        max-width: 600px;
+
+        padding: 30px 30px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+
+    body {
+        padding: 15px 10px;
+    }
+
+    .inscription-container {
+        padding: 25px 20px;
+
+        border-radius: 8px;
+    }
+
+    .logo img {
+        width: 75px;
+        height: 75px;
+    }
+
+    h1 {
+        font-size: 23px;
+    }
+
+    .ligne-orange {
+        width: 55px;
+        height: 3px;
+
+        margin-bottom: 25px;
+    }
+
+    .form-group input,
+    .form-group select {
+        height: 43px;
+
+        font-size: 13px;
+    }
+
+    button {
+        height: 45px;
+    }
+}

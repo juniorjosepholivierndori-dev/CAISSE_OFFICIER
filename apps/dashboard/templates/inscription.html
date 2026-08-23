@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Caisse des Officiers du GMMG</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <div class="inscription-container">
+
+        <div class="logo">
+            <img src="/static/images/logo-gmmg.png" alt="Logo GMMG">
+        </div>
+
+        <h1>Créer un compte</h1>
+        <div class="ligne-orange"></div>
+
+        <form action="/inscription/" method="post">
+
+            <div class="form-group">
+                <label for="mecano">Numéro mécano</label>
+                <input type="text" id="mecano" name="mecano" 
+                placeholder="Entrez votre numéro mécano" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nom">Nom</label>
+                <input type="text" id="nom" name="nom" 
+                placeholder="Entrez votre nom" required>
+            </div>
+
+            <div class="form-group">
+                <label for="prenom">Prénom</label>
+                <input type="text" id="prenom" name="prenom" 
+                placeholder="Entrez votre prénom" required>
+            </div>
+
+            <div class="form-group">
+                <label for="pays">Pays</label>
+                <input type="text" id="pays" name="pays"
+                 placeholder="Entrez votre pays" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ville">Ville</label>
+                <input type="text" id="ville" name="ville" 
+                placeholder="Entrez votre ville" required>
+            </div>
+
+            <div class="form-group">
+                <label for="grade">Grade</label>
+                <input type="text" id="grade" name="grade" 
+                placeholder="Entrez votre grade" required>
+            </div>
+
+            <div class="form-group">
+                <label for="unite">Unité</label>
+                <input type="text" id="unite" name="unite"
+                 placeholder="Entrez votre unité" required>
+            </div>
+
+            <div class="form-group">
+                <label for="statut">Statut</label>
+                <select id="statut" name="statut" required>
+                    <option value="">Sélectionnez votre statut</option>
+                    <option value="retraite">Retraité</option>
+                    <option value="fonction">En Fonction</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="date_naissance">Date de naissance</label>
+                <input type="date" id="date_naissance" name="date_naissance" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telephone">Téléphone</label>
+                <input type="tel" id="telephone" name="telephone" 
+                placeholder="Entrez votre numéro de téléphone" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" 
+                placeholder="Entrez votre email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password"
+                 placeholder="Entrez votre mot de passe" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirmer le mot de passe</label>
+                <input type="password" id="confirm_password" name="confirm_password"
+                 placeholder="Confirmez votre mot de passe" required>
+            </div>
+
+            <button type="submit">ENREGISTRER</button>
+
+        </form>
+
+        <p>Vous avez déjà un compte ? 
+              <a href="/connexion/">Se connecter</a>
+        </p>
+
+    </div>
+
+   <script src="/static/js/inscription.js"></script>
+
+</body>
+</html>
+
