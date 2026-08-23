@@ -1,0 +1,272 @@
+/* =========================
+   RESET
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f7f9;
+    color: #1f2937;
+}
+
+
+/* =========================
+   CONTENU PRINCIPAL
+========================= */
+
+.main-content {
+    width: 100%;
+    min-height: 100vh;
+    padding: 35px 45px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.topbar h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 7px;
+}
+
+.topbar p {
+    font-size: 15px;
+    color: #6b7280;
+}
+
+
+/* =========================
+   STATISTIQUES
+========================= */
+
+.statistics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.stat-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+}
+
+/* Icône verte */
+
+.stat-icon.green {
+    background: #e9f7ef;
+    color: #198754;
+}
+
+/* Icône orange */
+
+.stat-icon.orange {
+    background: #fff1e6;
+    color: #f58220;
+}
+
+.stat-card span {
+    display: block;
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 7px;
+}
+
+.stat-card strong {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+
+/* =========================
+   CARTE TABLEAU
+========================= */
+
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.table-card {
+    padding: 25px;
+}
+
+
+/* =========================
+   TITRE DU TABLEAU
+========================= */
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.title-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 19px;
+}
+
+.title-icon.orange {
+    background: #fff1e6;
+    color: #f58220;
+}
+
+.card-title h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+
+/* =========================
+   TABLEAU
+========================= */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #f8fafc;
+}
+
+th {
+    padding: 15px;
+    text-align: left;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #374151;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+td {
+    padding: 15px;
+
+    font-size: 14px;
+    color: #4b5563;
+
+    border-bottom: 1px solid #f0f0f0;
+}
+
+tbody tr:hover {
+    background: #fafafa;
+}
+
+
+/* =========================
+   MESSAGE TABLEAU VIDE
+========================= */
+
+#cotisations-body:empty::after {
+    content: "Aucune cotisation enregistrée.";
+    display: table-cell;
+    text-align: center;
+    padding: 30px;
+    color: #9ca3af;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 800px) {
+
+    .main-content {
+        padding: 25px 20px;
+    }
+
+    .statistics {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar h1 {
+        font-size: 25px;
+    }
+
+    .table-card {
+        padding: 18px;
+    }
+
+    th,
+    td {
+        padding: 12px 10px;
+        font-size: 13px;
+    }
+}
+
+
+@media (max-width: 500px) {
+
+    .main-content {
+        padding: 20px 15px;
+    }
+
+    .stat-card {
+        padding: 20px;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 19px;
+    }
+
+    .stat-card strong {
+        font-size: 20px;
+    }
+
+}

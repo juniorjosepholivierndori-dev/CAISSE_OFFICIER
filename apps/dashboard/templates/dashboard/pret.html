@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Enregistrer un prêt</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'dashboard/css/pret.css' %}"
+    >
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Enregistrer un prêt</h1>
+
+        <form id="pretForm" method="POST">
+
+            {% csrf_token %}
+
+            <label for="matricule">
+                Numéro mécano
+            </label>
+
+            <input
+                type="text"
+                id="matricule"
+                name="mecano"
+                placeholder="Entrez le numéro mécano"
+                required
+            >
+
+
+            <label for="officier">
+                Nom et prénom de l'officier
+            </label>
+
+            <input
+                type="text"
+                id="officier"
+                name="officier"
+                placeholder="Nom et prénom"
+                readonly
+            >
+
+
+            <label for="montant">
+                Montant du prêt
+            </label>
+            <input type="text" id="montant" readonly>
+
+
+
+            <label for="date_pret">
+                Date du prêt
+            </label>
+
+            <input
+                type="date"
+                id="date_pret"
+                name="date_pret"
+                required
+            >
+
+
+            <label for="motif">
+                Motif
+            </label>
+
+            <textarea
+                id="motif"
+                name="motif"
+                placeholder="Motif du prêt"
+                rows="4"
+            ></textarea>
+
+
+            <label for="duree">
+                Durée de remboursement
+            </label>
+
+            <input
+                type="number"
+                id="duree"
+                name="duree_remboursement"
+                placeholder="Durée en mois"
+                min="1"
+                required
+            >
+
+
+            <div class="actions">
+
+                <button
+                    type="reset"
+                    id="btn-annuler"
+                >
+                    Annuler
+                </button>
+
+                <button type="submit">
+                    Enregistrer
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <script src="{% static 'dashboard/js/pret.js' %}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,681 @@
+/* ================================
+   RESET
+================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f7f6;
+    color: #222;
+}
+
+
+/* ================================
+   DASHBOARD
+================================ */
+
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* ================================
+   MENU GAUCHE
+================================ */
+
+.sidebar {
+    width: 245px;
+    min-height: 100vh;
+    background: #006b3c;
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+}
+
+
+/* ================================
+   EN-TÊTE DU MENU
+================================ */
+
+.sidebar-header {
+    padding: 22px 18px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+
+/* LOGO */
+
+.logo-container {
+    width: 58px;
+    height: 58px;
+
+    background: white;
+
+    border-radius: 8px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.logo-container img {
+    display: block;
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    background: transparent;
+    border: 0;
+}
+
+
+/* NOM GMMG */
+
+.brand h2 {
+    font-size: 20px;
+    margin-bottom: 3px;
+}
+
+.brand span {
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+
+/* ================================
+   MENU
+================================ */
+
+.menu {
+    padding: 25px 12px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 13px 14px;
+
+    margin-bottom: 7px;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 7px;
+
+    font-size: 13px;
+
+    transition: 0.2s;
+}
+
+.menu-item i {
+    width: 20px;
+    text-align: center;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+
+/* MENU ACTIF */
+
+.menu-item.active {
+    background: #f36c0a;
+}
+
+
+/* DÉCONNEXION */
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding: 15px 12px 25px;
+}
+
+
+/* ================================
+   CONTENU PRINCIPAL
+================================ */
+
+.main-content {
+    margin-left: 245px;
+
+    width: calc(100% - 245px);
+
+    min-height: 100vh;
+}
+
+
+/* ================================
+   BARRE DU HAUT
+================================ */
+
+.topbar {
+    height: 90px;
+
+    background: white;
+
+    border-bottom: 1px solid #e4e8e5;
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 35px;
+}
+
+.topbar h1 {
+    font-size: 25px;
+
+    color: #222;
+
+    margin-bottom: 5px;
+}
+
+.topbar p {
+    color: #777;
+
+    font-size: 13px;
+}
+
+
+/* ICÔNE PROFIL */
+
+.profile-icon {
+    width: 45px;
+    height: 45px;
+
+    background: #eaf5ef;
+
+    color: #006b3c;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    font-size: 19px;
+}
+
+
+/* ================================
+   CONTENU
+================================ */
+
+.content {
+    padding: 30px 35px;
+}
+
+
+/* ================================
+   PARTIE HAUTE
+================================ */
+
+.top-section {
+    display: grid;
+
+    grid-template-columns: 1.2fr 0.8fr;
+
+    gap: 25px;
+
+    margin-bottom: 25px;
+}
+
+
+/* ================================
+   CARTES
+================================ */
+
+.card {
+    background: white;
+
+    border-radius: 10px;
+
+    border: 1px solid #e5e8e6;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+
+/* ================================
+   TITRE DES CARTES
+================================ */
+
+.card-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 20px;
+
+    border-bottom: 1px solid #edf0ee;
+}
+
+.card-title h2 {
+    font-size: 17px;
+
+    color: #222;
+}
+
+.card-title p {
+    font-size: 12px;
+
+    color: #888;
+
+    margin-top: 4px;
+}
+
+
+/* ICÔNE TITRE */
+
+.title-icon {
+    width: 37px;
+    height: 37px;
+
+    background: #eaf5ef;
+
+    color: #006b3c;
+
+    border-radius: 7px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* ICÔNE ORANGE */
+
+.title-icon.orange {
+    background: #fff1e7;
+
+    color: #f36c0a;
+}
+
+
+/* ================================
+   INFORMATIONS DU PROFIL
+================================ */
+
+.profile-info {
+    padding: 8px 20px 15px;
+}
+
+.info-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    min-height: 40px;
+
+    border-bottom: 1px solid #f0f1f0;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.label {
+    color: #777;
+
+    font-size: 12px;
+}
+
+.value {
+    color: #222;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+/* ================================
+   RÉSUMÉ DES OPÉRATIONS
+================================ */
+
+.summary-list {
+    padding: 15px 20px;
+}
+
+.summary-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid #f0f1f0;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+
+/* ICÔNES */
+
+.summary-icon {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 8px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* COTISATION */
+
+.summary-icon.cotisation {
+    background: #fff1e7;
+
+    color: #f36c0a;
+}
+
+
+/* PRÊT */
+
+.summary-icon.pret {
+    background: #edf3ff;
+
+    color: #315da8;
+}
+
+
+/* REMBOURSEMENT */
+
+.summary-icon.remboursement {
+    background: #eaf5ef;
+
+    color: #00844a;
+}
+
+
+/* TEXTE */
+
+.summary-item span {
+    display: block;
+
+    color: #777;
+
+    font-size: 12px;
+
+    margin-bottom: 4px;
+}
+
+.summary-item strong {
+    font-size: 22px;
+
+    color: #222;
+}
+
+
+/* ================================
+   ACTIVITÉS RÉCENTES
+================================ */
+
+.activities-card {
+    overflow: hidden;
+}
+
+
+/* TABLEAU */
+
+.table-container {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+
+/* EN-TÊTE TABLEAU */
+
+thead {
+    background: #f7f9f8;
+}
+
+th {
+    text-align: left;
+
+    padding: 14px 20px;
+
+    color: #777;
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    font-weight: 600;
+}
+
+
+/* CELLULES */
+
+td {
+    padding: 15px 20px;
+
+    border-top: 1px solid #edf0ee;
+
+    font-size: 12px;
+}
+
+
+/* ================================
+   BADGES
+================================ */
+
+.badge {
+    display: inline-block;
+
+    padding: 5px 8px;
+
+    border-radius: 5px;
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+.badge-green {
+    background: #eaf5ef;
+
+    color: #00844a;
+}
+
+.badge-orange {
+    background: #fff1e7;
+
+    color: #f36c0a;
+}
+
+.badge-blue {
+    background: #edf3ff;
+
+    color: #315da8;
+}
+
+
+/* ================================
+   MONTANTS
+================================ */
+
+.amount {
+    font-weight: bold;
+}
+
+.amount.green {
+    color: #00844a;
+}
+
+.amount.blue {
+    color: #315da8;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 1100px) {
+
+    .top-section {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    .sidebar {
+        width: 70px;
+    }
+
+    .sidebar-header {
+        justify-content: center;
+
+        padding: 15px 5px;
+    }
+
+    .brand,
+    .menu-item span {
+        display: none;
+    }
+
+    .menu-item {
+        justify-content: center;
+
+        padding: 14px 5px;
+    }
+
+    .main-content {
+        margin-left: 70px;
+
+        width: calc(100% - 70px);
+    }
+
+    .content {
+        padding: 20px 15px;
+    }
+
+    .topbar {
+        padding: 0 15px;
+    }
+
+    .topbar h1 {
+        font-size: 20px;
+    }
+
+    .top-section {
+        grid-template-columns: 1fr;
+    }
+
+}
+.menu-item.active {
+    background-color: #f36c0a;
+    color: white;
+}
+/* =========================================================
+   BADGES - RÉSUMÉ DES OPÉRATIONS
+========================================================= */
+
+.summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.summary-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+}
+
+.summary-operation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    width: 100%;
+}
+
+.summary-operation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-badge {
+    position: relative;
+
+    width: 28px;
+    height: 28px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    padding: 0;
+    margin: 0;
+
+    background-color: #f97316;
+    color: #ffffff;
+
+    border-radius: 50%;
+
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 28px;
+
+    text-align: center;
+
+    flex: 0 0 28px;
+}

@@ -1,0 +1,152 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7f6;
+    color: #333;
+}
+
+.historique-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+/* EN-TÊTE */
+
+.historique-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.historique-header h1 {
+    color: #1f6b45;
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.historique-header p {
+    color: #777;
+    font-size: 15px;
+}
+
+.btn-retour {
+    text-decoration: none;
+    background: #1f6b45;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+}
+
+.btn-retour:hover {
+    background: #185437;
+}
+
+
+/* TABLEAU */
+
+.table-container {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.historique-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.historique-table thead {
+    background: #1f6b45;
+    color: white;
+}
+
+.historique-table th {
+    padding: 17px;
+    text-align: left;
+    font-size: 15px;
+}
+
+.historique-table td {
+    padding: 17px;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 14px;
+}
+
+.historique-table tbody tr:hover {
+    background: #f8faf9;
+}
+
+
+/* BADGES */
+
+.badge {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.cotisation {
+    background: #e7f6ed;
+    color: #1f6b45;
+}
+
+.pret {
+    background: #fff3df;
+    color: #c77700;
+}
+
+.remboursement {
+    background: #e8f0ff;
+    color: #315ea8;
+}
+
+
+/* MONTANT */
+
+.montant {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+
+/* AUCUNE DONNÉE */
+
+.aucune-donnee {
+    text-align: center;
+    padding: 40px !important;
+    color: #888;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .historique-container {
+        width: 95%;
+    }
+
+    .historique-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .historique-table {
+        min-width: 700px;
+    }
+}
