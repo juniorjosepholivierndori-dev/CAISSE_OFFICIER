@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion | Caisse des officiers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--forest:#0d3325;--forest-dark:#08251a;--orange:#f4762d;--orange-dark:#df5f1f;--ink:#17241d;--muted:#708078;--line:#dfe9e3;--surface:#fff;--background:#edf3ef}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--background);color:var(--ink);font-family:Manrope,Arial,sans-serif;display:grid;place-items:center;padding:24px;position:relative;overflow:hidden}body:before{content:"";position:absolute;inset:0;background:linear-gradient(125deg,var(--forest-dark) 0 35%,transparent 35% 100%);z-index:-1}.login-shell{width:min(940px,100%);display:grid;grid-template-columns:.9fr 1.1fr;background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:0 20px 60px #09291b2b}.welcome{padding:48px 42px;background:var(--forest);color:#fff;display:flex;flex-direction:column;justify-content:space-between;min-height:520px}.logo{width:86px;height:86px;object-fit:contain;margin-bottom:30px}.welcome h1{font-size:30px;line-height:1.1;margin:0 0 14px;letter-spacing:0}.welcome p{max-width:280px;color:#c5d8cd;line-height:1.7;font-size:14px}.welcome small{color:#a8c2b4;font-size:11px;letter-spacing:.08em;text-transform:uppercase}.form-side{padding:58px 64px;display:flex;align-items:center}.form-content{width:min(390px,100%)}h2{font-size:25px;margin:0 0 8px}.intro{color:var(--muted);font-size:13px;margin:0 0 30px}.field{margin-bottom:18px}.field label{display:block;font-size:12px;font-weight:800;margin-bottom:7px}.field input{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:9px;background:#fbfdfb;color:var(--ink);font:inherit;font-size:14px}.field input:focus{outline:3px solid #f4762d2e;border-color:var(--orange)}.errorlist{margin:7px 0 0;padding:0;color:#bd4038;list-style:none;font-size:12px}.form-error{padding:11px 13px;border-radius:9px;background:#fff0ef;color:#bd4038;font-size:12px;margin-bottom:18px}.submit{width:100%;padding:13px;border:0;border-radius:9px;background:var(--orange);color:#fff;font:800 13px Manrope,sans-serif;cursor:pointer;box-shadow:0 7px 16px #f4762d38}.submit:hover{background:var(--orange-dark)}@media(max-width:700px){body{padding:0;place-items:stretch;background:var(--surface)}body:before{display:none}.login-shell{display:block;border-radius:0;box-shadow:none}.welcome{min-height:auto;padding:30px 24px 28px}.logo{width:64px;height:64px;margin-bottom:18px}.welcome h1{font-size:24px}.welcome p{margin-bottom:0}.welcome small{display:none}.form-side{padding:34px 24px}.form-content{width:100%}}
+  </style>
+</head>
+<body>
+  <main class="login-shell">
+    <section class="welcome">
+      <div>
+        <img class="logo" src="{% static 'dashboard/css/js/images/logo.gmmg.jpeg' %}" alt="Logo de la Caisse des officiers">
+        <h1>Caisse des officiers</h1>
+        <p>Un espace sécurisé pour suivre les cotisations, les prêts et les remboursements.</p>
+      </div>
+      <small>Espace trésorier</small>
+    </section>
+    <section class="form-side">
+      <div class="form-content">
+        <h2>Connexion</h2>
+        <p class="intro">Accédez à votre tableau de bord.</p>
+        <form method="post">
+          {% csrf_token %}
+          {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+          <div class="field"><label for="id_username">Nom d'utilisateur</label>{{ form.username }}{{ form.username.errors }}</div>
+          <div class="field"><label for="id_password">Mot de passe</label>{{ form.password }}{{ form.password.errors }}</div>
+          <button class="submit" type="submit">Se connecter</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

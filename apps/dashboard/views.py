@@ -1,16 +1,24 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
 
 from apps.operations.models import Cotisation, Pret, Remboursement
 from apps.referentiels.models import Adherent
 from apps.audit.models import Audit
 
 
+class DashboardLoginView(LoginView):
+    template_name = "dashboard/login.html"
+    redirect_authenticated_user = True
+
+
 # =========================================================
 # PROFIL TRÉSORIER
 # =========================================================
 
+@login_required
 def profil_tresorier(request):
 
     # -----------------------------------------------------
@@ -61,6 +69,7 @@ def profil_tresorier(request):
 # API PROFIL
 # =========================================================
 
+@login_required
 def profil_api(request):
 
     utilisateur = request.user
@@ -144,6 +153,7 @@ def profil_api(request):
 # COTISATIONS
 # =========================================================
 
+@login_required
 def cotisations(request):
 
     # Récupérer toutes les cotisations
@@ -179,6 +189,7 @@ def cotisations(request):
 # PRÊTS
 # =========================================================
 
+@login_required
 def pret(request):
 
     return render(
@@ -191,6 +202,7 @@ def pret(request):
 # REMBOURSEMENTS
 # =========================================================
 
+@login_required
 def remboursements(request):
 
     # -----------------------------------------------------
@@ -320,6 +332,7 @@ def remboursements(request):
 # HISTORIQUE
 # =========================================================
 
+@login_required
 def historique(request):
 
     # -----------------------------------------------------
@@ -371,6 +384,7 @@ def historique(request):
 # RECHERCHE D'UN MÉCANO
 # =========================================================
 
+@login_required
 def rechercher_mecano(request):
 
     mecano = request.GET.get(

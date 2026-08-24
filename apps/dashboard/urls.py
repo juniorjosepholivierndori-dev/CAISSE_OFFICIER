@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .views import (
+    DashboardLoginView,
     profil_tresorier,
     profil_api,
     cotisations,
@@ -11,7 +12,15 @@ from .views import (
     deconnexion,
 )
 
+app_name = "dashboard"
+
 urlpatterns = [
+
+    path(
+        "connexion/",
+        DashboardLoginView.as_view(),
+        name="login",
+    ),
 
     path(
         "profil-tresorier/",
