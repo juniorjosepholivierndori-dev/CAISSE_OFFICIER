@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cotisations — GMMG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'dashboard/css/theme.css' %}">
+</head>
+<body>
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="{% static 'dashboard/css/js/images/logo.gmmg.jpeg' %}" alt="Logo">
+      <div>
+        <div class="title">Caisse GMMG</div>
+        <div class="role">Admin</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Général</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'profile-admin' %}active{% endif %}" href="{% url 'accounts:profile-admin' %}">
+        <i class="fa-solid fa-user"></i><span>Mon Profil</span>
+      </a>
+      
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Gestion</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'utilisateurs' %}active{% endif %}" href="{% url 'accounts:utilisateurs' %}">
+        <i class="fa-solid fa-users"></i><span>Utilisateurs</span>{% if users_count %}<span class="badge" style="margin-left:auto;background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700">{{ users_count }}</span>{% endif %}
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'cotisations-admin' %}active{% endif %}" href="{% url 'accounts:cotisations-admin' %}">
+        <i class="fa-solid fa-coins"></i><span>Cotisations</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'prets-admin' %}active{% endif %}" href="{% url 'accounts:prets-admin' %}">
+        <i class="fa-solid fa-building-columns"></i><span>Prêts</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'remboursements-admin' %}active{% endif %}" href="{% url 'accounts:remboursements-admin' %}">
+        <i class="fa-solid fa-money-bill-wave"></i><span>Remboursements</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'validation-admin' %}active{% endif %}" href="{% url 'accounts:validation-admin' %}">
+        <i class="fa-solid fa-circle-check"></i><span>Validation</span>{% if demandes_count %}<span class="badge" style="margin-left:auto;background:var(--primary-orange);color:#fff;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700">{{ demandes_count }}</span>{% endif %}
+      </a>
+      
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Système</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'parametres-admin' %}active{% endif %}" href="{% url 'accounts:parametres-admin' %}">
+        <i class="fa-solid fa-gear"></i><span>Paramètres</span>
+      </a>
+      <a class="nav-item" href="{% url 'dashboard:deconnexion' %}" style="margin-top: auto;">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Déconnexion</span>
+      </a>
+    </nav>
+  </aside>
+  <div class="main-content">
+    <div class="topbar">
+      <h1>Cotisations</h1>
+      <div class="topbar-user">
+        <div class="topbar-avatar"><i class="fa-solid fa-user"></i></div>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <!-- STATS -->
+      <div class="stats-grid" style="margin-bottom:24px;">
+        <div class="stat-card">
+          <div class="label">Total collecté</div>
+          <div class="value" style="font-size:28px;font-weight:800;color:var(--primary-green);">{{ montant_total|floatformat:0 }} FCFA</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Nombre de cotisations</div>
+          <div class="value" style="font-size:28px;font-weight:800;color:var(--text-dark);">{{ nombre_cotisations }}</div>
+        </div>
+      </div>
+
+      <!-- MESSAGES -->
+      {% if messages %}
+        {% for message in messages %}
+          <div style="padding:12px 16px;border-radius:8px;margin-bottom:16px;font-weight:600;{% if 'erreur' in message.message|lower or 'veuillez' in message.message|lower %}background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;{% else %}background:#dcfce7;color:#166534;border:1px solid #86efac;{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <!-- GRILLE: Formulaire + Historique -->
+      <div style="display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start;">
+
+        <!-- FORMULAIRE -->
+        <div class="card" style="margin-bottom:0;">
+          <h3 class="card-title">Enregistrer une cotisation</h3>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">Saisir le paiement mensuel d'un officier</p>
+          <form method="post">
+            {% csrf_token %}
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div>
+                <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">{{ form.payeur.label }}</label>
+                {{ form.payeur }}
+                {% for e in form.payeur.errors %}<div style="color:#dc2626;font-size:12px;margin-top:4px;">{{ e }}</div>{% endfor %}
+              </div>
+              <div>
+                <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">{{ form.mois_concerne.label }}</label>
+                {{ form.mois_concerne }}
+                {% for e in form.mois_concerne.errors %}<div style="color:#dc2626;font-size:12px;margin-top:4px;">{{ e }}</div>{% endfor %}
+              </div>
+              <div>
+                <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">{{ form.mode_paiement.label }}</label>
+                {{ form.mode_paiement }}
+                {% for e in form.mode_paiement.errors %}<div style="color:#dc2626;font-size:12px;margin-top:4px;">{{ e }}</div>{% endfor %}
+              </div>
+              <div>
+                <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">{{ form.montant.label }}</label>
+                {{ form.montant }}
+                {% for e in form.montant.errors %}<div style="color:#dc2626;font-size:12px;margin-top:4px;">{{ e }}</div>{% endfor %}
+              </div>
+            </div>
+            <button type="submit" style="margin-top:20px;width:100%;padding:12px;background:var(--primary-orange);color:white;border:none;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+              <i class="fa-solid fa-plus"></i> Enregistrer
+            </button>
+          </form>
+        </div>
+
+        <!-- HISTORIQUE -->
+        <div class="card" style="margin-bottom:0;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3 class="card-title" style="margin-bottom:0;">Historique des cotisations</h3>
+            <span style="font-size:12px;color:var(--text-muted);">{{ nombre_cotisations }} enregistrée{{ nombre_cotisations|pluralize }}</span>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <input type="text" id="search-cot" placeholder="🔍 Rechercher un officier..." oninput="filterTable(this.value)"
+              style="width:100%;padding:10px 14px;border:1px solid var(--border-color);border-radius:8px;font-size:13px;outline:none;">
+          </div>
+
+          <div class="table-responsive">
+            <table class="table" id="cot-table">
+              <thead>
+                <tr>
+                  <th>Réf.</th>
+                  <th>Officier</th>
+                  <th>Mois</th>
+                  <th>Date de paiement</th>
+                  <th>Mode</th>
+                  <th>Montant</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for c in cotisations %}
+                <tr>
+                  <td><strong>#{{ c.id }}</strong></td>
+                  <td>{{ c.payeur.get_full_name|default:c.payeur.username }}{% if c.payeur.grade %}<br><small style="color:var(--text-muted);">{{ c.payeur.grade }}</small>{% endif %}</td>
+                  <td>{{ c.mois_concerne|date:"m/Y" }}</td>
+                  <td>{{ c.date_paiement|date:"d/m/Y" }}</td>
+                  <td><span style="background:#f1f5f9;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;">{{ c.mode_paiement }}</span></td>
+                  <td><strong style="color:var(--primary-green);">+ {{ c.montant|floatformat:0 }} FCFA</strong></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:24px;"><i class="fa-solid fa-inbox"></i> Aucune cotisation enregistrée.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- end grid -->
+
+    </div><!-- end page-content -->
+  </div><!-- end main-content -->
+</div><!-- end dashboard-layout -->
+
+<script>
+function filterTable(val) {
+  const rows = document.querySelectorAll('#cot-table tbody tr');
+  const q = val.toLowerCase();
+  rows.forEach(r => r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none');
+}
+// Style des selects/inputs du formulaire
+document.querySelectorAll('select, input[type=text], input[type=number], input[type=date]').forEach(el => {
+  el.style.cssText = 'width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;outline:none;';
+});
+</script>
+</body>
+</html>

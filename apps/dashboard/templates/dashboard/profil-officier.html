@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Espace Officier — GMMG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'dashboard/css/theme.css' %}">
+  <style>
+    .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .lbl { color: var(--text-muted); font-weight: 600; }
+    .info-row .val { color: var(--text-dark); font-weight: 700; }
+    
+    .progress-bar{background:#e2e8f0;border-radius:99px;height:8px;width:100%;overflow:hidden;margin-top:8px}
+    .progress-fill{background:var(--primary-orange);height:100%}
+    .pret-stat{font-size:24px;font-weight:800;color:var(--text-dark)}
+    
+    .badge-status{display:inline-flex;padding:3px 9px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em}
+    .status-actif{background:#dcfce7;color:#166534}
+    .status-attente{background:#fef9c3;color:#854d0e}
+    .status-refus{background:#fee2e2;color:#991b1b}
+  </style>
+</head>
+<body>
+<div class="dashboard-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="{% static 'dashboard/css/js/images/logo.gmmg.jpeg' %}" alt="Logo">
+      <div>
+        <div class="title">GMMG</div>
+        <div class="role">Espace Officier</div>
+      </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <a class="nav-item {% if request.resolver_match.url_name == 'profil-officier' %}active{% endif %}" href="{% url 'dashboard:profil-officier' %}">
+        <i class="fa-solid fa-house-user"></i><span>Tableau de bord</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-cotisations' %}active{% endif %}" href="{% url 'dashboard:officier-cotisations' %}">
+        <i class="fa-solid fa-coins"></i><span>Mes Cotisations</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-prets' %}active{% endif %}" href="{% url 'dashboard:officier-prets' %}">
+        <i class="fa-solid fa-building-columns"></i><span>Demande de Prêt</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-remboursements' %}active{% endif %}" href="{% url 'dashboard:officier-remboursements' %}">
+        <i class="fa-solid fa-money-bill-wave"></i><span>Mes Remboursements</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-validation' %}active{% endif %}" href="{% url 'dashboard:officier-validation' %}">
+        <i class="fa-solid fa-list-check"></i><span>Suivi Validation</span>
+      </a>
+      <a class="nav-item" href="{% url 'dashboard:deconnexion' %}" style="margin-top: auto;">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Déconnexion</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <div class="topbar">
+      <h1>Bienvenue, {{ user.first_name }} {{ user.last_name }}</h1>
+      <div class="topbar-user">
+        <div class="topbar-avatar"><i class="fa-solid fa-user"></i></div>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+        
+        <!-- INFOS PERSONNELLES -->
+        <div class="card" style="margin-bottom: 0;">
+          <h3 class="card-title">Mes Informations</h3>
+          <div class="info-row"><span class="lbl">Matricule (Mécano)</span><span class="val">{{ user.mecano|default:"—" }}</span></div>
+          <div class="info-row"><span class="lbl">Grade</span><span class="val">{{ user.grade|default:"—" }}</span></div>
+          <div class="info-row"><span class="lbl">Unité</span><span class="val">{{ user.unite|default:"—" }}</span></div>
+          <div class="info-row"><span class="lbl">Email</span><span class="val">{{ user.email|default:"—" }}</span></div>
+          <div class="info-row"><span class="lbl">Statut</span><span class="val">{{ user.statut|default:"—" }}</span></div>
+        </div>
+        
+        <!-- MON PRET ACTUEL -->
+        <div class="card" style="margin-bottom: 0;">
+          <h3 class="card-title">Mon Prêt</h3>
+          {% if pret %}
+            <div style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">
+              <span class="badge-status {% if pret.etat == 'ACTIF' %}status-actif{% elif pret.etat == 'EN_ATTENTE' %}status-attente{% else %}status-refus{% endif %}">
+                {{ pret.get_etat_display }}
+              </span>
+              <span style="font-size:12px;color:var(--text-muted)"><i class="fa-regular fa-calendar"></i> {{ pret.date_pret|date:"d M Y" }}</span>
+            </div>
+            
+            <div class="info-row" style="border:0;padding-bottom:0"><span class="lbl">Montant emprunté</span><span class="val" style="font-size:16px">{{ pret.montant|floatformat:0 }} FCFA</span></div>
+            
+            <div style="margin:20px 0">
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+                <span style="color:var(--text-muted);font-weight:600">Remboursé : <span style="color:var(--primary-green)">{{ pret.total_rembourse|floatformat:0 }} FCFA</span></span>
+                <span style="color:var(--text-dark);font-weight:700">{{ pret.pourcentage_rembourse }}%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:{{ pret.pourcentage_rembourse }}%"></div>
+              </div>
+            </div>
+            
+            <div style="background:var(--bg-color);padding:12px;border-radius:8px;text-align:center;border:1px dashed var(--border-color)">
+              <span style="display:block;font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:700;margin-bottom:2px">Reste à payer</span>
+              <span class="pret-stat" style="color:var(--primary-orange)">{{ pret.montant_restant|floatformat:0 }} FCFA</span>
+            </div>
+          {% else %}
+            <div style="padding:40px; text-align:center; color:var(--text-muted); font-size:13px;">
+              <i class="fa-solid fa-face-smile" style="font-size:32px;opacity:0.3;margin-bottom:12px;display:block"></i>
+              Aucun prêt en cours ou en attente.<br>Votre situation financière est saine !
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      
+      <!-- HISTORIQUE COTISATIONS -->
+      <div class="card">
+        <h3 class="card-title">Historique de mes cotisations</h3>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Période</th>
+                <th>Date de paiement</th>
+                <th>Mode</th>
+                <th>Montant</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for c in cotisations %}
+              <tr>
+                <td><strong style="color:var(--text-dark)">{{ c.mois_concerne|date:"F Y"|title }}</strong></td>
+                <td>{{ c.date_paiement|date:"d/m/Y" }}</td>
+                <td><span style="background:var(--bg-color);padding:3px 8px;border-radius:6px;font-size:11px;border:1px solid var(--border-color);">{{ c.mode_paiement|default:"—" }}</span></td>
+                <td><strong style="color:var(--primary-green)">+ {{ c.montant|floatformat:0 }} FCFA</strong></td>
+              </tr>
+              {% empty %}
+              <tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 24px;">Aucune cotisation enregistrée.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+</body>
+</html>

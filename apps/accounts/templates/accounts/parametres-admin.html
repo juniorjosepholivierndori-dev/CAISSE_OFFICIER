@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paramètres — GMMG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'dashboard/css/theme.css' %}">
+</head>
+<body>
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="{% static 'dashboard/css/js/images/logo.gmmg.jpeg' %}" alt="Logo">
+      <div>
+        <div class="title">Caisse GMMG</div>
+        <div class="role">Admin</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Général</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'profile-admin' %}active{% endif %}" href="{% url 'accounts:profile-admin' %}">
+        <i class="fa-solid fa-user"></i><span>Mon Profil</span>
+      </a>
+      
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Gestion</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'utilisateurs' %}active{% endif %}" href="{% url 'accounts:utilisateurs' %}">
+        <i class="fa-solid fa-users"></i><span>Utilisateurs</span>{% if users_count %}<span class="badge" style="margin-left:auto;background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700">{{ users_count }}</span>{% endif %}
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'cotisations-admin' %}active{% endif %}" href="{% url 'accounts:cotisations-admin' %}">
+        <i class="fa-solid fa-coins"></i><span>Cotisations</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'prets-admin' %}active{% endif %}" href="{% url 'accounts:prets-admin' %}">
+        <i class="fa-solid fa-building-columns"></i><span>Prêts</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'remboursements-admin' %}active{% endif %}" href="{% url 'accounts:remboursements-admin' %}">
+        <i class="fa-solid fa-money-bill-wave"></i><span>Remboursements</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'validation-admin' %}active{% endif %}" href="{% url 'accounts:validation-admin' %}">
+        <i class="fa-solid fa-circle-check"></i><span>Validation</span>{% if demandes_count %}<span class="badge" style="margin-left:auto;background:var(--primary-orange);color:#fff;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700">{{ demandes_count }}</span>{% endif %}
+      </a>
+      
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Système</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'parametres-admin' %}active{% endif %}" href="{% url 'accounts:parametres-admin' %}">
+        <i class="fa-solid fa-gear"></i><span>Paramètres</span>
+      </a>
+      <a class="nav-item" href="{% url 'dashboard:deconnexion' %}" style="margin-top: auto;">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Déconnexion</span>
+      </a>
+    </nav>
+  </aside>
+  <div class="main-content">
+    <div class="topbar">
+      <h1>Paramètres</h1>
+      <div class="topbar-user">
+        <div class="topbar-avatar"><i class="fa-solid fa-user"></i></div>
+      </div>
+    </div>
+    <div class="page-content">
+
+    <!-- MESSAGES -->
+    {% if messages %}
+      {% for message in messages %}
+        <div class="msg {% if '❌' in message.message or 'Veuillez' in message.message %}error{% else %}success{% endif %}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+
+      <!-- Erreurs globales du formulaire -->
+      {% if form.non_field_errors %}
+        <div class="panel" style="border-color:#f5c6cb;background:#fff8f8">
+          {% for error in form.non_field_errors %}
+            <div class="field"><div class="non-field-errors"><i class="fa-solid fa-triangle-exclamation"></i> {{ error }}</div></div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <!-- INFORMATIONS PERSONNELLES -->
+      <div class="panel" style="margin-bottom: 24px;">
+        <div class="panel-header">
+          <div>
+            <h3><i class="fa-solid fa-user-pen"></i> Informations personnelles</h3>
+            <div class="panel-sub">Ces informations apparaissent sur votre profil administrateur</div>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>{{ form.last_name.label }}</label>
+            {{ form.last_name }}
+            {% for e in form.last_name.errors %}<div class="error-text">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="form-field">
+            <label>{{ form.first_name.label }}</label>
+            {{ form.first_name }}
+            {% for e in form.first_name.errors %}<div class="error-text">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="form-field">
+            <label>{{ form.grade.label }}</label>
+            {{ form.grade }}
+            {% for e in form.grade.errors %}<div class="error-text">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="form-field">
+            <label>{{ form.unite.label }}</label>
+            {{ form.unite }}
+            {% for e in form.unite.errors %}<div class="error-text">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="form-field" style="grid-column:1/-1">
+            <label>{{ form.email.label }}</label>
+            {{ form.email }}
+            {% for e in form.email.errors %}<div class="error-text">{{ e }}</div>{% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- SÉCURITÉ -->
+      <div class="panel" style="margin-bottom: 24px;">
+        <div class="panel-header">
+          <div>
+            <h3><i class="fa-solid fa-lock"></i> Sécurité</h3>
+            <div class="panel-sub">Modifiez votre mot de passe régulièrement. Laissez vide pour conserver l'actuel.</div>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>{{ form.new_password.label }}</label>
+            {{ form.new_password }}
+            {% for e in form.new_password.errors %}<div class="error-text">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="form-field">
+            <label>{{ form.confirm_password.label }}</label>
+            {{ form.confirm_password }}
+            {% for e in form.confirm_password.errors %}<div class="error-text">{{ e }}</div>{% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <button class="btn-submit" type="submit" style="width:auto;"><i class="fa-solid fa-floppy-disk"></i> Enregistrer les modifications</button>
+      </div>
+    </form>
+    
+
+    </div><!-- end page-content -->
+  </div><!-- end main-content -->
+</div><!-- end dashboard-layout -->
+</body>
+</html>
+

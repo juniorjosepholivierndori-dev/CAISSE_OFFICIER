@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validation des prêts — GMMG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'dashboard/css/theme.css' %}">
+</head>
+<body>
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="{% static 'dashboard/css/js/images/logo.gmmg.jpeg' %}" alt="Logo">
+      <div>
+        <div class="title">Caisse GMMG</div>
+        <div class="role">Admin</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Général</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'profile-admin' %}active{% endif %}" href="{% url 'accounts:profile-admin' %}">
+        <i class="fa-solid fa-user"></i><span>Mon Profil</span>
+      </a>
+      
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Gestion</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'utilisateurs' %}active{% endif %}" href="{% url 'accounts:utilisateurs' %}">
+        <i class="fa-solid fa-users"></i><span>Utilisateurs</span>{% if users_count %}<span class="badge" style="margin-left:auto;background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700">{{ users_count }}</span>{% endif %}
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'cotisations-admin' %}active{% endif %}" href="{% url 'accounts:cotisations-admin' %}">
+        <i class="fa-solid fa-coins"></i><span>Cotisations</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'prets-admin' %}active{% endif %}" href="{% url 'accounts:prets-admin' %}">
+        <i class="fa-solid fa-building-columns"></i><span>Prêts</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'remboursements-admin' %}active{% endif %}" href="{% url 'accounts:remboursements-admin' %}">
+        <i class="fa-solid fa-money-bill-wave"></i><span>Remboursements</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'validation-admin' %}active{% endif %}" href="{% url 'accounts:validation-admin' %}">
+        <i class="fa-solid fa-circle-check"></i><span>Validation</span>{% if demandes_count %}<span class="badge" style="margin-left:auto;background:var(--primary-orange);color:#fff;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700">{{ demandes_count }}</span>{% endif %}
+      </a>
+      
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Système</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'parametres-admin' %}active{% endif %}" href="{% url 'accounts:parametres-admin' %}">
+        <i class="fa-solid fa-gear"></i><span>Paramètres</span>
+      </a>
+      <a class="nav-item" href="{% url 'dashboard:deconnexion' %}" style="margin-top: auto;">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Déconnexion</span>
+      </a>
+    </nav>
+  </aside>
+  <div class="main-content">
+    <div class="topbar">
+      <h1>Validation des prêts</h1>
+      <div class="topbar-user">
+        <div class="topbar-avatar"><i class="fa-solid fa-user"></i></div>
+      </div>
+    </div>
+    <div class="page-content">
+
+    <!-- MESSAGES -->
+    {% if messages %}
+      {% for message in messages %}
+        {% if '⚠️' in message.message %}
+          <div class="msg warning">{{ message }}</div>
+        {% elif '❌' in message.message %}
+          <div class="msg error">{{ message }}</div>
+        {% else %}
+          <div class="msg success">{{ message }}</div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <h3>Demandes en attente</h3>
+          <div class="panel-sub">
+            {% if prets %}
+              {{ prets|length }} demande{{ prets|length|pluralize }} nécessitant votre approbation
+            {% else %}
+              Aucune demande en attente
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      {% if prets %}
+        {% for pret in prets %}
+        <div class="demande-card">
+          <div class="demande-info">
+            <div class="name">{{ pret.adherent.nom }} {{ pret.adherent.prenom }}</div>
+            <div class="sub">{{ pret.adherent.grade }} — {{ pret.adherent.unite }} — Mécano : {{ pret.adherent.mecano }}</div>
+            <div class="demande-meta">
+              <div class="meta-item">
+                <span class="meta-label">Montant demandé</span>
+                <span class="meta-value highlight">{{ pret.montant|floatformat:0 }} FCFA</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Durée</span>
+                <span class="meta-value">{{ pret.duree_remboursement }} mois</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Date de demande</span>
+                <span class="meta-value">{{ pret.date_pret|date:"d/m/Y" }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Réf. prêt</span>
+                <span class="meta-value">#{{ pret.id }}</span>
+              </div>
+            </div>
+            {% if pret.motif %}
+            <div class="motif-box">
+              <i class="fa-solid fa-quote-left" style="opacity:.5;margin-right:6px"></i>{{ pret.motif }}
+            </div>
+            {% endif %}
+          </div>
+          <div class="demande-actions">
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="pret_id" value="{{ pret.id }}">
+              <button class="btn-approve" name="decision" value="approve">
+                <i class="fa-solid fa-check"></i> Approuver
+              </button>
+            </form>
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="pret_id" value="{{ pret.id }}">
+              <button class="btn-reject" name="decision" value="reject">
+                <i class="fa-solid fa-xmark"></i> Refuser
+              </button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty-state">
+          <i class="fa-solid fa-circle-check"></i>
+          <p>Aucune demande en attente de validation.</p>
+        </div>
+      {% endif %}
+    
+
+    </div><!-- end page-content -->
+  </div><!-- end main-content -->
+</div><!-- end dashboard-layout -->
+</body>
+</html>
+

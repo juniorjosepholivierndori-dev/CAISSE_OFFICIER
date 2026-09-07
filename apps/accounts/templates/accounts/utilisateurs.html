@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utilisateurs — GMMG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'dashboard/css/theme.css' %}">
+</head>
+<body>
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="{% static 'dashboard/css/js/images/logo.gmmg.jpeg' %}" alt="Logo">
+      <div>
+        <div class="title">Caisse GMMG</div>
+        <div class="role">Admin</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Général</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'profile-admin' %}active{% endif %}" href="{% url 'accounts:profile-admin' %}">
+        <i class="fa-solid fa-user"></i><span>Mon Profil</span>
+      </a>
+      
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Gestion</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'utilisateurs' %}active{% endif %}" href="{% url 'accounts:utilisateurs' %}">
+        <i class="fa-solid fa-users"></i><span>Utilisateurs</span>{% if users_count %}<span class="badge" style="margin-left:auto;background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700">{{ users_count }}</span>{% endif %}
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'cotisations-admin' %}active{% endif %}" href="{% url 'accounts:cotisations-admin' %}">
+        <i class="fa-solid fa-coins"></i><span>Cotisations</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'prets-admin' %}active{% endif %}" href="{% url 'accounts:prets-admin' %}">
+        <i class="fa-solid fa-building-columns"></i><span>Prêts</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'remboursements-admin' %}active{% endif %}" href="{% url 'accounts:remboursements-admin' %}">
+        <i class="fa-solid fa-money-bill-wave"></i><span>Remboursements</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'validation-admin' %}active{% endif %}" href="{% url 'accounts:validation-admin' %}">
+        <i class="fa-solid fa-circle-check"></i><span>Validation</span>{% if demandes_count %}<span class="badge" style="margin-left:auto;background:var(--primary-orange);color:#fff;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700">{{ demandes_count }}</span>{% endif %}
+      </a>
+      
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Système</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'parametres-admin' %}active{% endif %}" href="{% url 'accounts:parametres-admin' %}">
+        <i class="fa-solid fa-gear"></i><span>Paramètres</span>
+      </a>
+      <a class="nav-item" href="{% url 'dashboard:deconnexion' %}" style="margin-top: auto;">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Déconnexion</span>
+      </a>
+    </nav>
+  </aside>
+  <div class="main-content">
+    <div class="topbar">
+      <h1>Utilisateurs</h1>
+      <div class="topbar-user">
+        <div class="topbar-avatar"><i class="fa-solid fa-user"></i></div>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h3>Utilisateurs</h3>
+            <div class="panel-sub">Gérez les officiers inscrits et définissez leurs rôles sur la plateforme</div>
+          </div>
+          <button class="add-btn" type="button" onclick="document.getElementById('user-form-panel').scrollIntoView({behavior:'smooth'});">+ Ajouter un utilisateur</button>
+        </div>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert" style="margin:12px 0; padding:10px 12px; border-radius:10px; background:#e9f9ee; color:#1a4b2a;">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <form method="get" class="toolbar">
+          <input class="input" type="text" name="q" value="{{ search|default:'' }}" placeholder="Rechercher par nom, matricule, unité...">
+          <select class="input" name="role">
+            <option value="">Tous les rôles</option>
+            <option value="ADMIN" {% if role_filter == 'ADMIN' %}selected{% endif %}>Administrateur</option>
+            <option value="TRESORIER" {% if role_filter == 'TRESORIER' %}selected{% endif %}>Trésorier</option>
+            <option value="OFFICIER" {% if role_filter == 'OFFICIER' %}selected{% endif %}>Officier</option>
+          </select>
+          <select class="input" name="statut">
+            <option value="">Tous les statuts</option>
+            <option value="ACTIF" {% if statut_filter == 'ACTIF' %}selected{% endif %}>Actif</option>
+            <option value="INACTIF" {% if statut_filter == 'INACTIF' %}selected{% endif %}>Inactif</option>
+            <option value="RETRAITE" {% if statut_filter == 'RETRAITE' %}selected{% endif %}>Retraité</option>
+          </select>
+          <button class="add-btn" type="submit">Filtrer</button>
+        </form>
+
+        <div id="user-form-panel" class="panel" style="margin-top:20px; background:#fff;">
+          <h3 style="margin-bottom:12px;">{% if selected_user %}Modifier l'utilisateur{% else %}Ajouter un utilisateur{% endif %}</h3>
+          <form method="post">
+            {% csrf_token %}
+            {% if selected_user %}
+              <input type="hidden" name="action" value="update">
+              <input type="hidden" name="user_id" value="{{ selected_user.id }}">
+            {% else %}
+              <input type="hidden" name="action" value="create">
+            {% endif %}
+            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px;">
+              {% for field in form %}
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  {{ field }}
+                  {% if field.errors %}<small style="color:#b42318;">{{ field.errors|join:', ' }}</small>{% endif %}
+                </div>
+              {% endfor %}
+            </div>
+            <div style="margin-top:14px; display:flex; gap:10px;">
+              <button class="add-btn" type="submit">{% if selected_user %}Enregistrer les modifications{% else %}Créer l'utilisateur{% endif %}</button>
+              {% if selected_user %}
+                <a class="btn" href="{% url 'accounts:utilisateurs' %}" style="display:inline-block; padding:12px 18px; border-radius:10px; background:#e9edf1; color:#1d2b2c; text-decoration:none;">Annuler</a>
+              {% endif %}
+            </div>
+          </form>
+        </div>
+
+        <table class="table" style="margin-top:20px;">
+          <thead>
+            <tr>
+              <th>Officier</th>
+              <th>Matricule</th>
+              <th>Grade</th>
+              <th>Unité</th>
+              <th>Rôle</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if users %}
+              {% for user in users %}
+                <tr>
+                  <td>{{ user.get_full_name|default:user.username }}</td>
+                  <td>{{ user.mecano|default:'-' }}</td>
+                  <td>{{ user.grade|default:'-' }}</td>
+                  <td>{{ user.unite|default:'-' }}</td>
+                  <td>{{ user.get_role_display }}</td>
+                  <td>{{ user.statut|default:'ACTIF' }}</td>
+                  <td>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                      <a href="?edit={{ user.id }}" class="add-btn" style="padding:8px 12px;">Modifier</a>
+                      <form method="post" onsubmit="return confirm('Supprimer cet utilisateur ?');">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <button type="submit" class="btn" style="padding:8px 12px; background:#d93d3d; color:white; border:none; border-radius:8px; cursor:pointer;">Supprimer</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr><td colspan="7" class="empty">Aucun utilisateur enregistré.</td></tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

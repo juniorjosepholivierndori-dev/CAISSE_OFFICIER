@@ -1,109 +1,112 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Historique - GMMG</title>
-
-    <link rel="stylesheet"
-          href="{% static 'dashboard/css/historique.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau de bord — GMMG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'dashboard/css/theme.css' %}">
 </head>
-
 <body>
-
-<div class="historique-container">
-
-    <!-- EN-TÊTE -->
-    <div class="historique-header">
-
-        <div>
-            <h1>Historique des opérations</h1>
-            <p>Consultez toutes les opérations effectuées dans la caisse.</p>
-        </div>
-
-        <a href="{% url 'profil-tresorier' %}" class="btn-retour">
-            ← Retour
-        </a>
-
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="{% static 'dashboard/css/js/images/logo.gmmg.jpeg' %}" alt="Logo">
+      <div>
+        <div class="title">GMMG</div>
+        <div class="role">Espace Trésorier</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item {% if request.resolver_match.url_name == 'profil-tresorier' %}active{% endif %}" href="{% url 'dashboard:profil-tresorier' %}">
+        <i class="fa-solid fa-house-user"></i><span>Tableau de bord</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'cotisations' %}active{% endif %}" href="{% url 'dashboard:cotisations' %}">
+        <i class="fa-solid fa-coins"></i><span>Cotisations</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'pret' %}active{% endif %}" href="{% url 'dashboard:pret' %}">
+        <i class="fa-solid fa-building-columns"></i><span>Demande de Prêts</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'remboursements' %}active{% endif %}" href="{% url 'dashboard:remboursements' %}">
+        <i class="fa-solid fa-money-bill-wave"></i><span>Remboursements</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'historique' %}active{% endif %}" href="{% url 'dashboard:historique' %}">
+        <i class="fa-solid fa-list-check"></i><span>Historique</span>
+      </a>
+      <a class="nav-item" href="{% url 'dashboard:deconnexion' %}" style="margin-top: auto;">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Déconnexion</span>
+      </a>
+    </nav>
+  </aside>
+  <div class="main-content">
+    <div class="topbar">
+      <h1>Tableau de bord</h1>
+      <div class="topbar-user">
+        <div class="topbar-avatar"><i class="fa-solid fa-user"></i></div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="topbar">
+      <div>
+        <div class="topbar-sub">Gestion financière</div>
+        <h1>Historique des opérations</h1>
+      </div>
+      <a href="{% url 'dashboard:profil-tresorier' %}" class="btn-retour"><i class="fa-solid fa-arrow-left"></i> Retour au profil</a>
     </div>
 
-
-    <!-- TABLEAU UNIQUE -->
-    <div class="table-container">
-
-        <table class="historique-table">
-
-            <thead>
-                <tr>
-                    <th>Action</th>
-                    <th>Description</th>
-                    <th>Date</th>
-                    <th>Montant</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-    {% for operation in historique_operations %}
-
-    <tr>
-
-        <td>
-            {% if operation.action == "Cotisation" %}
-                <span class="badge cotisation">
-                    Cotisation
-                </span>
-
-            {% elif operation.action == "Prêt" %}
-                <span class="badge pret">
-                    Prêt
-                </span>
-
-            {% else %}
-                <span class="badge remboursement">
-                    Remboursement
-                </span>
-            {% endif %}
-        </td>
-
-        <td>
-            {{ operation.description }}
-        </td>
-
-        <td>
-            {{ operation.date|date:"d/m/Y" }}
-        </td>
-
-        <td class="montant">
-            {{ operation.montant }} FCFA
-        </td>
-
-    </tr>
-
-    {% empty %}
-
-    <tr>
-        <td colspan="4" class="aucune-donnee">
-            Aucun historique disponible pour le moment.
-        </td>
-    </tr>
-
-    {% endfor %}
-
-</tbody>
-
+    <div class="card">
+      <h3>Journal des transactions</h3>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>Description</th>
+              <th>Montant</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for op in historique_operations %}
+            <tr>
+              <td>
+                {% if op.action == "Cotisation" %}
+                  <span class="badge-op badge-cotisation"><i class="fa-solid fa-coins"></i> Cotisation</span>
+                {% elif op.action == "Prêt" %}
+                  <span class="badge-op badge-pret"><i class="fa-solid fa-file-invoice-dollar"></i> Prêt</span>
+                {% elif op.action == "Remboursement" %}
+                  <span class="badge-op badge-remboursement"><i class="fa-solid fa-money-bill-transfer"></i> Remboursement</span>
+                {% endif %}
+              </td>
+              <td>{{ op.description }}</td>
+              <td><strong>{{ op.montant|floatformat:0 }} FCFA</strong></td>
+              <td style="color:#8aada8">{{ op.date|date:"d/m/Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="empty"><i class="fa-solid fa-clock-rotate-left" style="font-size:24px;display:block;margin-bottom:8px;opacity:.5"></i> Aucun historique disponible.</td></tr>
+            {% endfor %}
+          </tbody>
         </table>
+      </div>
 
+      {% if historique_operations.has_other_pages %}
+      <div style="display:flex;justify-content:center;gap:8px;margin-top:20px;">
+        {% if historique_operations.has_previous %}
+          <a href="?page={{ historique_operations.previous_page_number }}" style="padding:6px 12px;background:#e2e8f0;border-radius:6px;color:#475569;font-size:13px;font-weight:600;"><i class="fa-solid fa-chevron-left"></i> Précédent</a>
+        {% endif %}
+        <span style="padding:6px 12px;background:#3b82f6;color:white;border-radius:6px;font-size:13px;font-weight:600;">Page {{ historique_operations.number }} / {{ historique_operations.paginator.num_pages }}</span>
+        {% if historique_operations.has_next %}
+          <a href="?page={{ historique_operations.next_page_number }}" style="padding:6px 12px;background:#e2e8f0;border-radius:6px;color:#475569;font-size:13px;font-weight:600;">Suivant <i class="fa-solid fa-chevron-right"></i></a>
+        {% endif %}
+      </div>
+      {% endif %}
     </div>
-
+    </div>
+  </div>
 </div>
-
-
-<script src="{% static 'dashboard/js/historique.js' %}"></script>
-
 </body>
 </html>

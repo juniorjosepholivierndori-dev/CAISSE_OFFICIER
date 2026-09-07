@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tableau de bord — GMMG</title>
+  <title>Mes Cotisations — GMMG</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -18,24 +18,24 @@
       <img src="{% static 'dashboard/css/js/images/logo.gmmg.jpeg' %}" alt="Logo">
       <div>
         <div class="title">GMMG</div>
-        <div class="role">Espace Trésorier</div>
+        <div class="role">Espace Officier</div>
       </div>
     </div>
     <nav class="sidebar-nav">
-      <a class="nav-item {% if request.resolver_match.url_name == 'profil-tresorier' %}active{% endif %}" href="{% url 'dashboard:profil-tresorier' %}">
+      <a class="nav-item {% if request.resolver_match.url_name == 'profil-officier' %}active{% endif %}" href="{% url 'dashboard:profil-officier' %}">
         <i class="fa-solid fa-house-user"></i><span>Tableau de bord</span>
       </a>
-      <a class="nav-item {% if request.resolver_match.url_name == 'cotisations' %}active{% endif %}" href="{% url 'dashboard:cotisations' %}">
-        <i class="fa-solid fa-coins"></i><span>Cotisations</span>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-cotisations' %}active{% endif %}" href="{% url 'dashboard:officier-cotisations' %}">
+        <i class="fa-solid fa-coins"></i><span>Mes Cotisations</span>
       </a>
-      <a class="nav-item {% if request.resolver_match.url_name == 'pret' %}active{% endif %}" href="{% url 'dashboard:pret' %}">
-        <i class="fa-solid fa-building-columns"></i><span>Demande de Prêts</span>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-prets' %}active{% endif %}" href="{% url 'dashboard:officier-prets' %}">
+        <i class="fa-solid fa-building-columns"></i><span>Demande de Prêt</span>
       </a>
-      <a class="nav-item {% if request.resolver_match.url_name == 'remboursements' %}active{% endif %}" href="{% url 'dashboard:remboursements' %}">
-        <i class="fa-solid fa-money-bill-wave"></i><span>Remboursements</span>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-remboursements' %}active{% endif %}" href="{% url 'dashboard:officier-remboursements' %}">
+        <i class="fa-solid fa-money-bill-wave"></i><span>Mes Remboursements</span>
       </a>
-      <a class="nav-item {% if request.resolver_match.url_name == 'historique' %}active{% endif %}" href="{% url 'dashboard:historique' %}">
-        <i class="fa-solid fa-list-check"></i><span>Historique</span>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-validation' %}active{% endif %}" href="{% url 'dashboard:officier-validation' %}">
+        <i class="fa-solid fa-list-check"></i><span>Suivi Validation</span>
       </a>
       <a class="nav-item" href="{% url 'dashboard:deconnexion' %}" style="margin-top: auto;">
         <i class="fa-solid fa-right-from-bracket"></i><span>Déconnexion</span>
@@ -44,55 +44,33 @@
   </aside>
   <div class="main-content">
     <div class="topbar">
-      <h1>Tableau de bord</h1>
+      <h1>Mes Cotisations</h1>
       <div class="topbar-user">
         <div class="topbar-avatar"><i class="fa-solid fa-user"></i></div>
       </div>
     </div>
     <div class="page-content">
-      <div class="topbar">
-      <div class="topbar-sub">Gestion financière</div>
-      <h1>Suivi des cotisations</h1>
-    </div>
-
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="lbl">Total collecté</div>
-        <div class="val">{{ montant_total|floatformat:0 }} FCFA</div>
-      </div>
-      <div class="stat-card">
-        <div class="lbl">Nombre de cotisations</div>
-        <div class="val" style="color:#1d2b2c">{{ nombre_cotisations }}</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Liste des cotisations</h3>
-      <div class="toolbar">
-        <input type="text" id="search" placeholder="Rechercher un officier..." oninput="filterTable(this.value)">
-      </div>
+      <div class="card">
       <div class="table-responsive">
-        <table class="table" id="cot-table">
+        <table class="table">
           <thead>
             <tr>
-              <th>Officier</th>
-              <th>Mois</th>
-              <th>Année</th>
-              <th>Mode</th>
+              <th>Période</th>
+              <th>Date de paiement</th>
+              <th>Mode de paiement</th>
               <th>Montant</th>
             </tr>
           </thead>
           <tbody>
             {% for c in cotisations %}
             <tr>
-              <td><strong>{{ c.payeur.get_full_name|default:c.payeur.username }}</strong>{% if c.payeur.grade %}<br><small style="color:#8aada8">{{ c.payeur.grade }}</small>{% endif %}</td>
-              <td>{{ c.mois_concerne|date:"F" }}</td>
-              <td>{{ c.mois_concerne|date:"Y" }}</td>
-              <td><span class="badge-mode">{{ c.mode_paiement|default:"—" }}</span></td>
-              <td><strong>{{ c.montant|floatformat:0 }} FCFA</strong></td>
+              <td><strong style="color:#1e293b">{{ c.mois_concerne|date:"F Y"|title }}</strong></td>
+              <td>{{ c.date_paiement|date:"d/m/Y" }}</td>
+              <td><span style="background:#f1f5f9;padding:4px 8px;border-radius:6px;font-size:11px">{{ c.mode_paiement|default:"—" }}</span></td>
+              <td><strong style="color:#16a34a">+ {{ c.montant|floatformat:0 }} FCFA</strong></td>
             </tr>
             {% empty %}
-            <tr><td colspan="5" class="empty"><i class="fa-solid fa-inbox"></i> Aucune cotisation enregistrée.</td></tr>
+            <tr><td colspan="4" class="empty">Vous n'avez pas encore de cotisations enregistrées.</td></tr>
             {% endfor %}
           </tbody>
         </table>

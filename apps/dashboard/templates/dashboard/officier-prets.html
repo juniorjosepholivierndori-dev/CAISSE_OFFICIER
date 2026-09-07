@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faire une demande de prêt — GMMG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'dashboard/css/theme.css' %}">
+</head>
+<body>
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="{% static 'dashboard/css/js/images/logo.gmmg.jpeg' %}" alt="Logo">
+      <div>
+        <div class="title">GMMG</div>
+        <div class="role">Espace Officier</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item {% if request.resolver_match.url_name == 'profil-officier' %}active{% endif %}" href="{% url 'dashboard:profil-officier' %}">
+        <i class="fa-solid fa-house-user"></i><span>Tableau de bord</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-cotisations' %}active{% endif %}" href="{% url 'dashboard:officier-cotisations' %}">
+        <i class="fa-solid fa-coins"></i><span>Mes Cotisations</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-prets' %}active{% endif %}" href="{% url 'dashboard:officier-prets' %}">
+        <i class="fa-solid fa-building-columns"></i><span>Demande de Prêt</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-remboursements' %}active{% endif %}" href="{% url 'dashboard:officier-remboursements' %}">
+        <i class="fa-solid fa-money-bill-wave"></i><span>Mes Remboursements</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-validation' %}active{% endif %}" href="{% url 'dashboard:officier-validation' %}">
+        <i class="fa-solid fa-list-check"></i><span>Suivi Validation</span>
+      </a>
+      <a class="nav-item" href="{% url 'dashboard:deconnexion' %}" style="margin-top: auto;">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Déconnexion</span>
+      </a>
+    </nav>
+  </aside>
+  <div class="main-content">
+    <div class="topbar">
+      <h1>Faire une demande de prêt</h1>
+      <div class="topbar-user">
+        <div class="topbar-avatar"><i class="fa-solid fa-user"></i></div>
+      </div>
+    </div>
+    <div class="page-content">
+      {% if messages %}
+      {% for message in messages %}
+        <div class="msg {% if '❌' in message.message %}error{% else %}success{% endif %}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="card" style="max-width: 600px;">
+      <form method="POST" action="{% url 'dashboard:officier-prets' %}" onsubmit="const btn=this.querySelector('button[type=submit]'); btn.disabled=true; btn.innerHTML='<i class=\'fa-solid fa-spinner fa-spin\'></i> Traitement...'; return true;">
+        {% csrf_token %}
+        
+        <div class="form-group">
+          <label>Montant souhaité (FCFA)</label>
+          <input type="number" name="montant" class="form-control" placeholder="Ex: 500000" required min="1000">
+        </div>
+        
+        <div class="form-group">
+          <label>Durée de remboursement (en mois)</label>
+          <input type="number" name="duree_remboursement" class="form-control" placeholder="Ex: 12" required min="1">
+        </div>
+        
+        <div class="form-group">
+          <label>Motif de la demande (Optionnel)</label>
+          <textarea name="motif" class="form-control" rows="3" placeholder="Indiquez brièvement pourquoi vous demandez ce prêt..."></textarea>
+        </div>
+        
+        <button type="submit" class="btn-submit">
+          <i class="fa-solid fa-paper-plane"></i> Soumettre la demande
+        </button>
+      </form>
+    </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

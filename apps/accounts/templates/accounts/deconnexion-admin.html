@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Déconnexion — GMMG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'dashboard/css/theme.css' %}">
+</head>
+<body>
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="{% static 'dashboard/css/js/images/logo.gmmg.jpeg' %}" alt="Logo">
+      <div>
+        <div class="title">Caisse GMMG</div>
+        <div class="role">Admin</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Général</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'profile-admin' %}active{% endif %}" href="{% url 'accounts:profile-admin' %}">
+        <i class="fa-solid fa-user"></i><span>Mon Profil</span>
+      </a>
+      
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Gestion</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'utilisateurs' %}active{% endif %}" href="{% url 'accounts:utilisateurs' %}">
+        <i class="fa-solid fa-users"></i><span>Utilisateurs</span>{% if users_count %}<span class="badge" style="margin-left:auto;background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700">{{ users_count }}</span>{% endif %}
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'cotisations-admin' %}active{% endif %}" href="{% url 'accounts:cotisations-admin' %}">
+        <i class="fa-solid fa-coins"></i><span>Cotisations</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'prets-admin' %}active{% endif %}" href="{% url 'accounts:prets-admin' %}">
+        <i class="fa-solid fa-building-columns"></i><span>Prêts</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'remboursements-admin' %}active{% endif %}" href="{% url 'accounts:remboursements-admin' %}">
+        <i class="fa-solid fa-money-bill-wave"></i><span>Remboursements</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'validation-admin' %}active{% endif %}" href="{% url 'accounts:validation-admin' %}">
+        <i class="fa-solid fa-circle-check"></i><span>Validation</span>{% if demandes_count %}<span class="badge" style="margin-left:auto;background:var(--primary-orange);color:#fff;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700">{{ demandes_count }}</span>{% endif %}
+      </a>
+      
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:0 16px;margin:14px 0 6px;">Système</div>
+      <a class="nav-item {% if request.resolver_match.url_name == 'parametres-admin' %}active{% endif %}" href="{% url 'accounts:parametres-admin' %}">
+        <i class="fa-solid fa-gear"></i><span>Paramètres</span>
+      </a>
+      <a class="nav-item" href="{% url 'dashboard:deconnexion' %}" style="margin-top: auto;">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Déconnexion</span>
+      </a>
+    </nav>
+  </aside>
+  <div class="main-content">
+    <div class="topbar">
+      <h1>Déconnexion</h1>
+      <div class="topbar-user">
+        <div class="topbar-avatar"><i class="fa-solid fa-user"></i></div>
+      </div>
+    </div>
+    <div class="page-content">
+      <h1>Déconnexion</h1>
+        </div>
+        <div class="search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Rechercher un officier, une opération...">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="icon-wrap"><i class="fa-solid fa-right-from-bracket"></i></div>
+        <h2>Se déconnecter</h2>
+        <p>Vous êtes sur le point de quitter votre espace administrateur. Voulez-vous continuer ?</p>
+        <div class="actions">
+          <button class="btn">Annuler</button>
+          <button class="btn primary">Confirmer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,121 +1,247 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Enregistrer un prêt</title>
-
-    <link
-        rel="stylesheet"
-        href="{% static 'dashboard/css/pret.css' %}"
-    >
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion des Prêts — GMMG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'dashboard/css/theme.css' %}">
 </head>
-
 <body>
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="{% static 'dashboard/css/js/images/logo.gmmg.jpeg' %}" alt="Logo">
+      <div>
+        <div class="title">GMMG</div>
+        <div class="role">Espace Trésorier</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item {% if request.resolver_match.url_name == 'profil-tresorier' %}active{% endif %}" href="{% url 'dashboard:profil-tresorier' %}">
+        <i class="fa-solid fa-house-user"></i><span>Tableau de bord</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'cotisations' %}active{% endif %}" href="{% url 'dashboard:cotisations' %}">
+        <i class="fa-solid fa-coins"></i><span>Cotisations</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'pret' %}active{% endif %}" href="{% url 'dashboard:pret' %}">
+        <i class="fa-solid fa-building-columns"></i><span>Prêts</span>
+        {% if prets_en_attente_count %}<span style="margin-left:auto;background:var(--primary-orange);color:#fff;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700;">{{ prets_en_attente_count }}</span>{% endif %}
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'remboursements' %}active{% endif %}" href="{% url 'dashboard:remboursements' %}">
+        <i class="fa-solid fa-money-bill-wave"></i><span>Remboursements</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'historique' %}active{% endif %}" href="{% url 'dashboard:historique' %}">
+        <i class="fa-solid fa-list-check"></i><span>Historique</span>
+      </a>
+      <a class="nav-item" href="{% url 'dashboard:deconnexion' %}" style="margin-top: auto;">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Déconnexion</span>
+      </a>
+    </nav>
+  </aside>
 
-    <div class="container">
-
-        <h1>Enregistrer un prêt</h1>
-
-        <form id="pretForm" method="POST">
-
-            {% csrf_token %}
-
-            <label for="matricule">
-                Numéro mécano
-            </label>
-
-            <input
-                type="text"
-                id="matricule"
-                name="mecano"
-                placeholder="Entrez le numéro mécano"
-                required
-            >
-
-
-            <label for="officier">
-                Nom et prénom de l'officier
-            </label>
-
-            <input
-                type="text"
-                id="officier"
-                name="officier"
-                placeholder="Nom et prénom"
-                readonly
-            >
-
-
-            <label for="montant">
-                Montant du prêt
-            </label>
-            <input type="text" id="montant" readonly>
-
-
-
-            <label for="date_pret">
-                Date du prêt
-            </label>
-
-            <input
-                type="date"
-                id="date_pret"
-                name="date_pret"
-                required
-            >
-
-
-            <label for="motif">
-                Motif
-            </label>
-
-            <textarea
-                id="motif"
-                name="motif"
-                placeholder="Motif du prêt"
-                rows="4"
-            ></textarea>
-
-
-            <label for="duree">
-                Durée de remboursement
-            </label>
-
-            <input
-                type="number"
-                id="duree"
-                name="duree_remboursement"
-                placeholder="Durée en mois"
-                min="1"
-                required
-            >
-
-
-            <div class="actions">
-
-                <button
-                    type="reset"
-                    id="btn-annuler"
-                >
-                    Annuler
-                </button>
-
-                <button type="submit">
-                    Enregistrer
-                </button>
-
-            </div>
-
-        </form>
-
+  <div class="main-content">
+    <div class="topbar">
+      <h1><i class="fa-solid fa-building-columns" style="color:var(--primary-orange);margin-right:10px;"></i>Gestion des Prêts</h1>
+      <div class="topbar-user">
+        <div class="topbar-avatar"><i class="fa-solid fa-user"></i></div>
+      </div>
     </div>
 
-    <script src="{% static 'dashboard/js/pret.js' %}"></script>
+    <div class="page-content">
 
+      <!-- MESSAGES -->
+      {% if messages %}
+        {% for message in messages %}
+          <div class="msg {% if '❌' in message.message %}error{% else %}success{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <!-- DEMANDES EN ATTENTE -->
+      {% if prets_en_attente %}
+      <div class="card" style="border-left: 4px solid var(--primary-orange); margin-bottom: 24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h3 class="card-title" style="margin-bottom:0; color:var(--primary-orange);">
+            <i class="fa-solid fa-clock"></i> Demandes en attente de validation
+          </h3>
+          <span style="background:#ffedd5;color:var(--primary-orange);padding:4px 12px;border-radius:99px;font-size:12px;font-weight:700;">
+            {{ prets_en_attente_count }} demande{{ prets_en_attente_count|pluralize }}
+          </span>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Officier</th>
+                <th>Montant demandé</th>
+                <th>Durée</th>
+                <th>Date demande</th>
+                <th>Motif</th>
+                <th style="text-align:center;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in prets_en_attente %}
+              <tr>
+                <td>
+                  <strong>{{ p.adherent.nom }} {{ p.adherent.prenom }}</strong>
+                  <br><small style="color:var(--text-muted);">{{ p.adherent.mecano }} — {{ p.adherent.grade|default:"—" }}</small>
+                </td>
+                <td><strong style="color:var(--primary-green);font-size:16px;">{{ p.montant|floatformat:0 }} FCFA</strong></td>
+                <td>{{ p.duree_remboursement }} mois</td>
+                <td>{{ p.date_pret|date:"d/m/Y" }}</td>
+                <td style="max-width:180px;color:var(--text-muted);font-size:13px;">{{ p.motif|default:"—"|truncatechars:60 }}</td>
+                <td style="text-align:center;">
+                  <div style="display:flex;gap:8px;justify-content:center;">
+                    <form method="POST" action="{% url 'dashboard:valider-pret' p.id %}" style="display:inline;" onsubmit="return confirm('Valider ce prêt de {{ p.montant|floatformat:0 }} FCFA pour {{ p.adherent.nom }} ?');">
+                      {% csrf_token %}
+                      <input type="hidden" name="action" value="valider">
+                      <button type="submit" class="btn-success" style="font-size:12px;padding:7px 14px;">
+                        <i class="fa-solid fa-check"></i> Valider
+                      </button>
+                    </form>
+                    <form method="POST" action="{% url 'dashboard:valider-pret' p.id %}" style="display:inline;" onsubmit="return confirm('Refuser ce prêt ?');">
+                      {% csrf_token %}
+                      <input type="hidden" name="action" value="refuser">
+                      <button type="submit" class="btn-danger" style="font-size:12px;padding:7px 14px;">
+                        <i class="fa-solid fa-xmark"></i> Refuser
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- GRILLE: Formulaire + Tous les prêts -->
+      <div style="display:grid; grid-template-columns: 360px 1fr; gap:24px; align-items:start;">
+
+        <!-- FORMULAIRE NOUVEAU PRÊT (saisie manuelle trésorier) -->
+        <div class="card" style="margin-bottom:0;">
+          <h3 class="card-title">Enregistrer un prêt manuellement</h3>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">Saisissez le mécano pour retrouver l'officier.</p>
+          <form id="pretForm" method="POST" onsubmit="const btn=this.querySelector('button[type=submit]'); btn.disabled=true; btn.textContent='Traitement...'; return true;">
+            {% csrf_token %}
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div>
+                <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Numéro mécano</label>
+                <input type="text" id="matricule" name="mecano" placeholder="Ex: 12345" required
+                  oninput="rechercherMecano(this.value)"
+                  style="width:100%;padding:10px 14px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;outline:none;">
+              </div>
+              <div>
+                <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Officier trouvé</label>
+                <input type="text" id="officier" name="officier" placeholder="Recherche auto..." readonly
+                  style="width:100%;padding:10px 14px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;background:#f8fafc;outline:none;">
+              </div>
+              <div>
+                <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Montant (FCFA)</label>
+                <input type="number" name="montant" placeholder="Ex: 500000" required min="1000" max="50000000"
+                  style="width:100%;padding:10px 14px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;outline:none;">
+              </div>
+              <div>
+                <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Date du prêt</label>
+                <input type="date" name="date_pret" required
+                  style="width:100%;padding:10px 14px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;outline:none;">
+              </div>
+              <div>
+                <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Durée (mois)</label>
+                <input type="number" name="duree_remboursement" min="1" max="120" placeholder="Ex: 12" required
+                  style="width:100%;padding:10px 14px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;outline:none;">
+              </div>
+              <div>
+                <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Motif (facultatif)</label>
+                <textarea name="motif" rows="2" placeholder="Raison de la demande..."
+                  style="width:100%;padding:10px 14px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;outline:none;resize:vertical;font-family:inherit;"></textarea>
+              </div>
+            </div>
+            <button type="submit" class="btn-submit" style="margin-top:16px;">
+              <i class="fa-solid fa-check"></i> Soumettre la demande
+            </button>
+          </form>
+        </div>
+
+        <!-- LISTE DE TOUS LES PRÊTS -->
+        <div class="card" style="margin-bottom:0;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3 class="card-title" style="margin-bottom:0;">Tous les prêts</h3>
+          </div>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Officier</th>
+                  <th>Montant</th>
+                  <th>Durée</th>
+                  <th>Date</th>
+                  <th>Statut</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for p in tous_les_prets %}
+                <tr>
+                  <td>
+                    <strong>{{ p.adherent.nom }} {{ p.adherent.prenom }}</strong>
+                    <br><small style="color:var(--text-muted);">{{ p.adherent.mecano }}</small>
+                  </td>
+                  <td><strong>{{ p.montant|floatformat:0 }} FCFA</strong></td>
+                  <td>{{ p.duree_remboursement }} mois</td>
+                  <td>{{ p.date_pret|date:"d/m/Y" }}</td>
+                  <td>
+                    {% if p.etat == 'ACTIF' %}
+                      <span class="badge-status badge-actif">Actif</span>
+                    {% elif p.etat == 'EN_ATTENTE' %}
+                      <span class="badge-status badge-attente">En attente</span>
+                    {% elif p.etat == 'REFUSE' %}
+                      <span class="badge-status badge-refuse">Refusé</span>
+                    {% else %}
+                      <span class="badge-status" style="background:#f1f5f9;color:var(--text-muted);">{{ p.etat }}</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="5" class="empty"><i class="fa-solid fa-inbox"></i> Aucun prêt enregistré.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- end grid -->
+
+    </div><!-- end page-content -->
+  </div><!-- end main-content -->
+</div><!-- end dashboard-layout -->
+
+<script>
+let debounceTimer;
+function rechercherMecano(val) {
+  clearTimeout(debounceTimer);
+  if (val.length < 3) { document.getElementById('officier').value = ''; return; }
+  debounceTimer = setTimeout(() => {
+    fetch(`/api/rechercher-mecano/?mecano=${encodeURIComponent(val)}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById('officier').value = `${data.nom} ${data.prenom}`;
+        } else {
+          document.getElementById('officier').value = data.message || 'Introuvable';
+        }
+      });
+  }, 400);
+}
+</script>
 </body>
-
 </html>

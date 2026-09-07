@@ -1,3 +1,5 @@
+import datetime
+
 from django.conf import settings
 from django.db import models
 
@@ -94,6 +96,25 @@ class Pret(models.Model):
     def __str__(self):
         return f"Prêt de {self.montant} FCFA - {self.adherent}"
 
+    @property
+    def total_rembourse(self):
+        """Somme de tous les remboursements liés à ce prêt."""
+        return sum(r.montant for r in self.remboursements.all())
+
+    @property
+    def montant_restant(self):
+        """Montant encore dû."""
+        restant = self.montant - self.total_rembourse
+        return max(restant, 0)
+
+    @property
+    def pourcentage_rembourse(self):
+        """Pourcentage remboursé (0-100)."""
+        if self.montant == 0:
+            return 0
+        pct = (self.total_rembourse / self.montant) * 100
+        return min(int(pct), 100)
+
 
 class Remboursement(models.Model):
 
@@ -108,8 +129,9 @@ class Remboursement(models.Model):
         decimal_places=2
     )
 
+    # Champ éditable : permet la saisie rétroactive d'une date de remboursement
     date_remboursement = models.DateField(
-        auto_now_add=True
+        default=datetime.date.today
     )
 
     mode_paiement = models.CharField(

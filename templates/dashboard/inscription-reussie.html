@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription réussie | Caisse des officiers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'dashboard/css/theme.css' %}">
+  <style>
+    .success-circle {
+      width: 80px;
+      height: 80px;
+      background-color: var(--primary-green);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin: 0 auto 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-layout">
+    <div class="auth-bg-waves"></div>
+    
+    <div class="auth-card">
+      <div class="success-circle">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <h2>Inscription réussie !</h2>
+      <p style="margin-bottom: 24px; color: var(--text-muted);">
+        Votre compte a été créé avec succès.<br>Vous pouvez maintenant vous connecter.
+      </p>
+      
+      <a class="btn btn-orange" href="{% url 'dashboard:login' %}">
+        <i class="fa-solid fa-home"></i> RETOUR À L'ACCUEIL
+      </a>
+    </div>
+  </div>
+  <script src="{% static 'dashboard/js/all.min.js' %}"></script>
+</body>
+</html>

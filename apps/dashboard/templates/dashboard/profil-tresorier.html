@@ -1,632 +1,135 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Profil Trésorier - GMMG</title>
-
-    <link rel="stylesheet"
-          href="{% static 'dashboard/css/profil-tresorier.css' %}">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Profil — Trésorier GMMG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'dashboard/css/theme.css' %}">
+  <style>
+    .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .lbl { color: var(--text-muted); font-weight: 600; }
+    .info-row .val { color: var(--text-dark); font-weight: 700; }
+  </style>
 </head>
-
-
 <body>
+<div class="dashboard-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="{% static 'dashboard/css/js/images/logo.gmmg.jpeg' %}" alt="Logo">
+      <div>
+        <div class="title">GMMG</div>
+        <div class="role">Trésorier</div>
+      </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <a href="{% url 'dashboard:profil-tresorier' %}" class="nav-item active">
+        <i class="fa-solid fa-user"></i> Mon Profil
+      </a>
+      <a href="{% url 'dashboard:cotisations' %}" class="nav-item">
+        <i class="fa-regular fa-file-lines"></i> Enregistrer cotisation
+      </a>
+      <a href="{% url 'dashboard:pret' %}" class="nav-item">
+        <i class="fa-regular fa-file-lines"></i> Enregistrer prêt
+      </a>
+      <a href="{% url 'dashboard:remboursements' %}" class="nav-item">
+        <i class="fa-solid fa-money-bill-transfer"></i> Remboursements
+      </a>
+      <a href="{% url 'dashboard:historique' %}" class="nav-item">
+        <i class="fa-solid fa-clock-rotate-left"></i> Historique
+      </a>
+      <a href="{% url 'dashboard:deconnexion' %}" class="nav-item" style="margin-top: auto;">
+        <i class="fa-solid fa-power-off"></i> Déconnexion
+      </a>
+    </nav>
+  </aside>
 
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <div class="topbar">
+      <h1>Mon Profil</h1>
+      <div class="topbar-user">
+        <div class="topbar-avatar"><i class="fa-solid fa-user"></i></div>
+      </div>
+    </div>
 
-<div class="dashboard">
-
-
-    <!-- =====================================================
-         SIDEBAR
-    ====================================================== -->
-
-    <aside class="sidebar">
-
-
-        <div class="sidebar-header">
-
-
-            <div class="logo-container">
-
-                <img src="{% static 'dashboard/css/js/images/logo.gmmg.jpeg' %}"
-                     alt="Logo GMMG">
-
-            </div>
-
-
-            <div class="brand">
-
-                <h2>Caisse des officiers</h2>
-
-                <span>ESPACE TRESORIER</span>
-
-            </div>
-
-
+    <div class="page-content">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+        <!-- INFORMATIONS -->
+        <div class="card" style="margin-bottom: 0;">
+          <h3 class="card-title">Informations du trésorier</h3>
+          <div class="info-row"><span class="lbl">Mécano</span><span class="val">{{ user.mecano|default:"—" }}</span></div>
+          <div class="info-row"><span class="lbl">Nom</span><span class="val">{{ user.last_name|default:"—" }}</span></div>
+          <div class="info-row"><span class="lbl">Prénom</span><span class="val">{{ user.first_name|default:"—" }}</span></div>
+          <div class="info-row"><span class="lbl">Grade</span><span class="val">{{ user.grade|default:"—" }}</span></div>
+          <div class="info-row"><span class="lbl">Unité</span><span class="val">{{ user.unite|default:"—" }}</span></div>
+          <div class="info-row"><span class="lbl">État</span><span class="val">{{ user.etat|default:"En fonction" }}</span></div>
+          <div class="info-row"><span class="lbl">Statut</span><span class="val">{{ user.statut|default:"Actif" }}</span></div>
+          <div class="info-row"><span class="lbl">Téléphone</span><span class="val">{{ user.telephone|default:"—" }}</span></div>
+          <div class="info-row"><span class="lbl">Email</span><span class="val">{{ user.email|default:"—" }}</span></div>
         </div>
 
-
-        <!-- MENU -->
-
-        <nav class="menu">
-
-
-            <!-- PROFIL -->
-
-            <a href="#"
-               class="menu-item active">
-
-                <i class="fa-solid fa-user"></i>
-
-                <span>Mon Profil</span>
-
-            </a>
-
-
-            <!-- COTISATIONS -->
-
-            <a href="{% url 'cotisations' %}"
-               class="menu-item">
-
-                <i class="fa-solid fa-coins"></i>
-
-                <span>Suivi des cotisations</span>
-
-            </a>
-
-
-            <!-- PRETS -->
-
-            <a href="{% url 'pret' %}"
-               class="menu-item">
-
-                <i class="fa-solid fa-file-invoice-dollar"></i>
-
-                <span>Enregistrer prêt</span>
-
-            </a>
-
-
-            <!-- REMBOURSEMENTS -->
-
-            <a href="{% url 'remboursements' %}"
-               class="menu-item">
-
-                <i class="fa-solid fa-money-bill-transfer"></i>
-
-                <span>Remboursements</span>
-
-            </a>
-
-
-            <!-- HISTORIQUE -->
-
-            <a href="{% url 'historique' %}"
-               class="menu-item">
-
-                <i class="fa-solid fa-clock-rotate-left"></i>
-
-                <span>Historique</span>
-
-            </a>
-
-
-        </nav>
-
-
-        <!-- DECONNEXION -->
-
-        <div class="sidebar-bottom">
-
-            <a href="{% url 'deconnexion' %}"
-               class="menu-item logout">
-
-                <i class="fa-solid fa-right-from-bracket"></i>
-
-                <span>Déconnexion</span>
-
-            </a>
-
+        <!-- RÉSUMÉ DES OPÉRATIONS -->
+        <div class="card" style="margin-bottom: 0;">
+          <h3 class="card-title">Résumé des opérations</h3>
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 600; color: var(--text-muted);">Cotisations enregistrées</span>
+              <span style="font-weight: 800; font-size: 20px;">{{ nombre_cotisations }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 600; color: var(--text-muted);">Prêts enregistrés</span>
+              <span style="font-weight: 800; font-size: 20px;">{{ nombre_prets }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 600; color: var(--text-muted);">Remboursements enregistrés</span>
+              <span style="font-weight: 800; font-size: 20px;">{{ nombre_remboursements }}</span>
+            </div>
+          </div>
         </div>
-
-
-    </aside>
-
-
-    <!-- =====================================================
-         CONTENU PRINCIPAL
-    ====================================================== -->
-
-    <main class="main-content">
-
-
-        <!-- TOPBAR -->
-
-        <header class="topbar">
-
-            <div>
-
-                <h1>Mon Profil</h1>
-
-                <p>
-                    Bienvenue dans votre espace trésorier
-                </p>
-
-            </div>
-
-
-            <div class="profile-icon">
-
-                <i class="fa-solid fa-user"></i>
-
-            </div>
-
-        </header>
-
-
-        <!-- =================================================
-             CONTENU
-        ================================================== -->
-
-        <section class="content">
-
-
-            <!-- =================================================
-                 SECTION DU HAUT
-            ================================================== -->
-
-            <div class="top-section">
-
-
-                <!-- =============================================
-                     INFORMATIONS DU TRESORIER
-                ============================================== -->
-
-                <div class="card profile-card">
-
-
-                    <div class="card-title">
-
-                        <div class="title-icon">
-
-                            <i class="fa-solid fa-user"></i>
-
-                        </div>
-
-
-                        <h2>
-                            Informations du trésorier
-                        </h2>
-
-                    </div>
-
-
-                    <div class="profile-info">
-
-
-                        <div class="info-row">
-
-                            <span class="label">
-                                Mécano
-                            </span>
-
-                            <span class="value"></span>
-
-                        </div>
-
-
-                        <div class="info-row">
-
-                            <span class="label">
-                                Nom
-                            </span>
-
-                            <span class="value"></span>
-
-                        </div>
-
-
-                        <div class="info-row">
-
-                            <span class="label">
-                                Prénom
-                            </span>
-
-                            <span class="value"></span>
-
-                        </div>
-
-
-                        <div class="info-row">
-
-                            <span class="label">
-                                Grade
-                            </span>
-
-                            <span class="value"></span>
-
-                        </div>
-
-
-                        <div class="info-row">
-
-                            <span class="label">
-                                Unité
-                            </span>
-
-                            <span class="value"></span>
-
-                        </div>
-
-
-                        <div class="info-row">
-
-                            <span class="label">
-                                Pays
-                            </span>
-
-                            <span class="value"></span>
-
-                        </div>
-
-
-                        <div class="info-row">
-
-                            <span class="label">
-                                Ville
-                            </span>
-
-                            <span class="value"></span>
-
-                        </div>
-
-
-                        <div class="info-row">
-
-                            <span class="label">
-                                Statut
-                            </span>
-
-                            <span class="value"></span>
-
-                        </div>
-
-
-                        <div class="info-row">
-
-                            <span class="label">
-                                Téléphone
-                            </span>
-
-                            <span class="value"></span>
-
-                        </div>
-
-
-                        <div class="info-row">
-
-                            <span class="label">
-                                Email
-                            </span>
-
-                            <span class="value"></span>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-
-                <!-- =============================================
-                     RESUME DES OPERATIONS
-                ============================================== -->
-
-                <div class="card summary-card">
-
-
-                    <div class="card-title">
-
-                        <div class="title-icon orange">
-
-                            <i class="fa-solid fa-chart-column"></i>
-
-                        </div>
-
-
-                        <h2>
-                            Résumé des opérations
-                        </h2>
-
-                    </div>
-
-
-                    <div class="summary-list">
-
-
-                        <!-- COTISATIONS -->
-
-                        <div class="summary-item">
-
-                            <div class="summary-icon cotisation">
-
-                                <i class="fa-solid fa-coins"></i>
-
-                            </div>
-
-
-                            <div class="summary-operation">
-
-                                <span>
-                                    Suivi des cotisations
-                                </span>
-
-                                <span class="notification-badge">
-                                    {{ nombre_cotisations }}
-                                </span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- PRETS -->
-
-                        <div class="summary-item">
-
-                            <div class="summary-icon pret">
-
-                                <i class="fa-solid fa-file-invoice-dollar"></i>
-
-                            </div>
-
-
-                            <div class="summary-operation">
-
-                                <span>
-                                    Prêts enregistrés
-                                </span>
-
-                                <span class="notification-badge">
-                                    {{ nombre_prets }}
-                                </span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- REMBOURSEMENTS -->
-
-                        <div class="summary-item">
-
-                            <div class="summary-icon remboursement">
-
-                                <i class="fa-solid fa-money-bill-transfer"></i>
-
-                            </div>
-
-
-                            <div class="summary-operation">
-
-                                <span>
-                                    Remboursements enregistrés
-                                </span>
-
-                                <span class="notification-badge">
-                                    {{ nombre_remboursements }}
-                                </span>
-
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-
-
-            </div>
-
-
-            <!-- =================================================
-                 ACTIVITES RECENTES
-            ================================================== -->
-
-            <div class="card activities-card">
-
-
-                <div class="card-title">
-
-
-                    <div class="title-icon orange">
-
-                        <i class="fa-solid fa-clock-rotate-left"></i>
-
-                    </div>
-
-
-                    <div>
-
-                        <h2>
-                            Activités récentes
-                        </h2>
-
-                        <p>
-                            Dernières opérations enregistrées
-                        </p>
-
-                    </div>
-
-
-                </div>
-
-
-                <!-- TABLEAU -->
-
-                <div class="table-container">
-
-
-                    <table>
-
-
-                        <!-- EN-TETE -->
-
-                        <thead>
-
-                            <tr>
-
-                                <th>
-                                    Action
-                                </th>
-
-                                <th>
-                                    Description
-                                </th>
-
-                                <th>
-                                    Date
-                                </th>
-
-                                <th>
-                                    Montant
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-
-                        <!-- CORPS -->
-
-                        <tbody>
-
-
-                            {% for activite in activites %}
-
-
-                                <tr>
-
-
-                                    <!-- ACTION -->
-
-                                    <td>
-
-                                        {{ activite.operation_effectuee }}
-
-                                    </td>
-
-
-                                    <!-- DESCRIPTION -->
-
-                                    <td>
-
-                                        {% if activite.type_modification %}
-
-                                            {{ activite.type_modification }}
-
-                                        {% else %}
-
-                                            {{ activite.nom_table }}
-
-                                        {% endif %}
-
-                                    </td>
-
-
-                                    <!-- DATE -->
-
-                                    <td>
-
-                                        {{ activite.date_heure|date:"d/m/Y H:i" }}
-
-                                    </td>
-
-
-                                    <!-- MONTANT -->
-
-                                    <td>
-
-                                        {% if activite.donnees_apres.montant %}
-
-                                            {{ activite.donnees_apres.montant }}
-                                            FCFA
-
-                                        {% elif activite.donnees_avant.montant %}
-
-                                            {{ activite.donnees_avant.montant }}
-                                            FCFA
-
-                                        {% else %}
-
-                                            —
-
-                                        {% endif %}
-
-                                    </td>
-
-
-                                </tr>
-
-
-                            {% empty %}
-
-
-                                <tr>
-
-                                    <td colspan="4"
-                                        class="empty-message">
-
-                                        Aucune activité récente.
-
-                                    </td>
-
-                                </tr>
-
-
-                            {% endfor %}
-
-
-                        </tbody>
-
-
-                    </table>
-
-
-                </div>
-
-
-            </div>
-
-
-        </section>
-
-
-    </main>
-
-
+      </div>
+
+      <!-- ACTIVITÉS RÉCENTES -->
+      <div class="card">
+        <h3 class="card-title">Activités récentes</h3>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Montant</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in activites %}
+              <tr>
+                <td>{{ a.operation_effectuee }}</td>
+                <td>{{ a.type_modification|default:a.nom_table }}</td>
+                <td style="color: var(--text-muted);">{{ a.date_heure|date:"d/m/Y H:i" }}</td>
+                <td style="font-weight: 700; color: var(--primary-green);">
+                  {% if a.donnees_apres.montant %}{{ a.donnees_apres.montant }} FCFA{% else %}—{% endif %}
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 24px;">Aucune activité récente.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-
-<!-- JAVASCRIPT -->
-
-<script src="{% static 'dashboard/css/js/profil_tresorier.js' %}"></script>
-
-
 </body>
-
 </html>

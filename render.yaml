@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: caisse-officier
+    runtime: python
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.prod
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://caisse-officier.onrender.com"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: caisse-officier-db
+          property: connectionString
+
+databases:
+  - name: caisse-officier-db
+    databaseName: caisse_gmmg
+    user: caisse_user

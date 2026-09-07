@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription | Caisse des officiers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'dashboard/css/theme.css' %}">
+  <style>
+    /* Spécificités formulaire d'inscription */
+    .signup-form { display: grid; gap: 14px; text-align: left; }
+    .signup-field { display: flex; flex-direction: column; }
+    .signup-field label { font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 6px; }
+    .signup-field input, .signup-field select { padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-family: inherit; font-size: 14px; }
+    .signup-field input:focus, .signup-field select:focus { outline: none; border-color: var(--primary-orange); box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1); }
+    
+    /* Layout pour la maquette (Label à gauche, input à droite) si on est sur grand écran */
+    @media(min-width: 600px) {
+      .signup-field { flex-direction: row; align-items: center; }
+      .signup-field label { width: 160px; margin-bottom: 0; flex-shrink: 0; }
+      .signup-field input, .signup-field select { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-layout">
+    <div class="auth-bg-waves"></div>
+    
+    <div class="auth-card large">
+      <h2>Créer un compte</h2>
+      
+      <form method="post" class="signup-form">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div style="padding:11px;background:#fff0ef;color:#bd4038;border-radius:6px;font-size:13px;grid-column: 1 / -1;">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+        
+        {% for field in form %}
+          <div class="signup-field">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.errors %}
+              <div style="color: #bd4038; font-size: 12px; margin-left: auto;">{{ field.errors|striptags }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+        
+        <button class="btn btn-orange" style="margin-top: 15px;" type="submit"><i class="fa-solid fa-save"></i> ENREGISTRER</button>
+      </form>
+      
+      <div class="auth-footer" style="margin-top: 24px;">
+        <p>Vous avez déjà un compte ? <a href="{% url 'dashboard:login' %}">Se connecter</a></p>
+      </div>
+    </div>
+  </div>
+  <script src="{% static 'dashboard/js/all.min.js' %}"></script>
+</body>
+</html>

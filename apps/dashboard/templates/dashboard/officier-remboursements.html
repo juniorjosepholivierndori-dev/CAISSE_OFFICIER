@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mes Remboursements — GMMG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'dashboard/css/theme.css' %}">
+</head>
+<body>
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="{% static 'dashboard/css/js/images/logo.gmmg.jpeg' %}" alt="Logo">
+      <div>
+        <div class="title">GMMG</div>
+        <div class="role">Espace Officier</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item {% if request.resolver_match.url_name == 'profil-officier' %}active{% endif %}" href="{% url 'dashboard:profil-officier' %}">
+        <i class="fa-solid fa-house-user"></i><span>Tableau de bord</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-cotisations' %}active{% endif %}" href="{% url 'dashboard:officier-cotisations' %}">
+        <i class="fa-solid fa-coins"></i><span>Mes Cotisations</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-prets' %}active{% endif %}" href="{% url 'dashboard:officier-prets' %}">
+        <i class="fa-solid fa-building-columns"></i><span>Demande de Prêt</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-remboursements' %}active{% endif %}" href="{% url 'dashboard:officier-remboursements' %}">
+        <i class="fa-solid fa-money-bill-wave"></i><span>Mes Remboursements</span>
+      </a>
+      <a class="nav-item {% if request.resolver_match.url_name == 'officier-validation' %}active{% endif %}" href="{% url 'dashboard:officier-validation' %}">
+        <i class="fa-solid fa-list-check"></i><span>Suivi Validation</span>
+      </a>
+      <a class="nav-item" href="{% url 'dashboard:deconnexion' %}" style="margin-top: auto;">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Déconnexion</span>
+      </a>
+    </nav>
+  </aside>
+  <div class="main-content">
+    <div class="topbar">
+      <h1>Mes Remboursements</h1>
+      <div class="topbar-user">
+        <div class="topbar-avatar"><i class="fa-solid fa-user"></i></div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="card">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date du versement</th>
+              <th>Mode de paiement</th>
+              <th>Prêt concerné (Date)</th>
+              <th>Montant Remboursé</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in remboursements %}
+            <tr>
+              <td><strong style="color:#1e293b">{{ r.date_remboursement|date:"d M Y" }}</strong></td>
+              <td><span style="background:#f1f5f9;padding:4px 8px;border-radius:6px;font-size:11px">{{ r.mode_paiement|default:"—" }}</span></td>
+              <td style="color:#64748b;font-size:12px">{{ r.pret.date_pret|date:"d/m/Y" }}</td>
+              <td><strong style="color:#16a34a">+ {{ r.montant|floatformat:0 }} FCFA</strong></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="empty">Aucun remboursement effectué pour le moment.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      
+      {% if remboursements.has_other_pages %}
+      <div style="display:flex;justify-content:center;gap:8px;margin-top:20px;">
+        {% if remboursements.has_previous %}
+          <a href="?page={{ remboursements.previous_page_number }}" style="padding:6px 12px;background:#e2e8f0;border-radius:6px;color:#475569;font-size:13px;font-weight:600;"><i class="fa-solid fa-chevron-left"></i> Précédent</a>
+        {% endif %}
+        <span style="padding:6px 12px;background:#3b82f6;color:white;border-radius:6px;font-size:13px;font-weight:600;">Page {{ remboursements.number }} / {{ remboursements.paginator.num_pages }}</span>
+        {% if remboursements.has_next %}
+          <a href="?page={{ remboursements.next_page_number }}" style="padding:6px 12px;background:#e2e8f0;border-radius:6px;color:#475569;font-size:13px;font-weight:600;">Suivant <i class="fa-solid fa-chevron-right"></i></a>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
